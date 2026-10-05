@@ -506,7 +506,7 @@ if (LIVE) {
   );
   send = (name, dream) => addDoc(col, { name, dream, createdAt: serverTimestamp() });
 } else {
-  setTag(false, 'Demo mode: add your Firebase config to share dreams with everyone');
+  setTag(false, '');
   firstLoad = false;
   render(localDreams);
   send = async (name, dream) => { localDreams.unshift({ id: 'l' + Date.now(), name, dream }); render(localDreams); };
