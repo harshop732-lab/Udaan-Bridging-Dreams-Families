@@ -1,471 +1,310 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Udaan · every child's dream, every family's hope</title>
-  <!-- Tailwind via CDN + custom config -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
-          colors: { 
-            ink: '#0a0a0a',
-            paper: '#faf9f7',
-            accent: '#c4452c',
-            accentSoft: '#e8d9d4',
-            warmgray: '#8b7e7a'
-          },
-          animation: {
-            'fade-up': 'fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-            'float': 'float 3s ease-in-out infinite',
-            'pulse-soft': 'pulseSoft 2s infinite',
-            'spin-slow': 'spin 8s linear infinite',
-          },
-          keyframes: {
-            fadeUp: { '0%': { opacity: '0', transform: 'translateY(24px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
-            float: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-6px)' } },
-            pulseSoft: { '0%,100%': { opacity: '1' }, '50%': { opacity: '0.7' } },
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    /* smooth scroll, selection, base setup */
-    html { scroll-behavior: smooth; }
-    body { 
-      background-color: #faf9f7; 
-      color: #0a0a0a; 
-      /* Ambient background gradient for visual interest */
-      background-image: radial-gradient(circle at 15% 50%, rgba(196, 69, 44, 0.03), transparent 25%),
-                        radial-gradient(circle at 85% 30%, rgba(196, 69, 44, 0.04), transparent 25%);
-      background-attachment: fixed;
-    }
-    ::selection { background: #c4452c; color: white; }
-
-    /* --- NAV HOVER EFFECTS --- */
-    .nav-link {
-      position: relative;
-      display: inline-block;
-    }
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 2px;
-      bottom: -4px;
-      left: 50%;
-      background-color: #c4452c;
-      transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-      transform: translateX(-50%);
-      border-radius: 2px;
-    }
-    .nav-link:hover::after {
-      width: 100%;
-    }
-    .nav-link:active {
-      transform: scale(0.92);
-    }
-
-    /* glassmorphism for nav */
-    .nav-blur {
-      background: rgba(250, 249, 247, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(196, 69, 44, 0.1);
-      transition: box-shadow 0.3s ease;
-    }
-    .nav-blur:hover {
-      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
-    }
-
-    /* interactive card hover & click animations */
-    .card-hover {
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.2s;
-    }
-    .card-hover:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.1), 0 8px 16px -8px rgba(196,69,44,0.15);
-      border-color: #c4452c;
-    }
-    .card-hover:active {
-      transform: scale(0.97) translateY(-2px);
-    }
-
-    .pillar-card {
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-      border-left: 4px solid #c4452c;
-    }
-    .pillar-card:hover {
-      border-left-width: 8px;
-      background-color: #ffffff;
-      transform: translateX(6px) translateY(-4px);
-      box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08);
-    }
-
-    .stat-number { transition: color 0.3s; }
-    .stat-number:hover { color: #c4452c; }
-    
-    .journey-step { transition: all 0.3s ease; }
-    .journey-step:hover {
-      background-color: #ffffff;
-      transform: scale(1.03) translateY(-4px);
-      box-shadow: 0 12px 24px -8px rgba(0,0,0,0.08);
-      border-color: rgba(196, 69, 44, 0.2);
-    }
-
-    .feature-tag { transition: all 0.2s ease; cursor: default; }
-    .feature-tag:hover {
-      background-color: #c4452c;
-      color: white;
-      transform: scale(1.05) translateY(-2px);
-      border-color: #c4452c;
-      box-shadow: 0 4px 10px rgba(196, 69, 44, 0.2);
-    }
-
-    /* subtle float on icons */
-    .float-icon { animation: float 3s ease-in-out infinite; }
-    .pulse-dot { animation: pulseSoft 2s infinite; }
-
-    /* Staggered load utilities */
-    .delay-100 { animation-delay: 100ms; }
-    .delay-200 { animation-delay: 200ms; }
-    .delay-300 { animation-delay: 300ms; }
-  </style>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Udaan – Bridging Dreams & Families</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a0e2a;--ink2:#121847;--sun:#ffb347;--rose:#ff6b8b;--sky:#6ee7ff;--violet:#8b7bff;--mint:#7af0c0;--txt:#eef0ff;--mut:#a9aed6;
+ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{margin:0;background:var(--ink);color:var(--txt);font-family:'DM Sans',system-ui,sans-serif;overflow-x:hidden;line-height:1.65}
+h1,h2,h3,.disp{font-family:'Bricolage Grotesque','DM Sans',system-ui,sans-serif;letter-spacing:-.02em;line-height:1.08}
+.bg{position:fixed;inset:0;z-index:-2;background:radial-gradient(1200px 700px at 80% -10%,#2a2377 0,transparent 60%),radial-gradient(900px 600px at -10% 40%,#4a1d5e55 0,transparent 60%),linear-gradient(180deg,var(--ink),#0d1238 60%,#1a1040)}
+.blob{position:fixed;z-index:-1;border-radius:50%;filter:blur(90px);opacity:.35;animation:drift 18s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate(60px,-40px) scale(1.15)}}
+#glow{position:fixed;width:420px;height:420px;margin:-210px 0 0 -210px;border-radius:50%;pointer-events:none;z-index:-1;background:radial-gradient(circle,rgba(255,179,71,.18),rgba(139,123,255,.10) 45%,transparent 70%);transition:opacity .3s}
+#bar{position:fixed;top:0;left:0;height:3px;width:0;z-index:60;background:linear-gradient(90deg,var(--sun),var(--rose),var(--violet))}
+.glass{position:relative;overflow:hidden;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:26px;transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .3s,background .3s}
+.glass::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(380px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.16),transparent 45%)}
+.glass:hover::before{opacity:1}.glass:hover{border-color:rgba(255,255,255,.28)}
+.grad{background:linear-gradient(100deg,var(--sun),var(--rose) 55%,var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 1.5rem;border-radius:999px;font-weight:700;cursor:pointer;border:0;transition:transform .25s,box-shadow .3s;color:#1b1030;background:linear-gradient(100deg,var(--sun),var(--rose))}
+.btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 14px 40px -10px var(--rose)}.btn:active{transform:scale(.96)}
+.btn.ghost{background:rgba(255,255,255,.08);color:var(--txt);border:1px solid rgba(255,255,255,.2)}
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.55);transform:scale(0);animation:rip .6s ease-out forwards;pointer-events:none}
+@keyframes rip{to{transform:scale(4);opacity:0}}
+.rv{opacity:0;transform:translateY(28px);transition:opacity .8s,transform .8s cubic-bezier(.2,.8,.2,1)}.rv.in{opacity:1;transform:none}
+.kite{animation:fly 7s ease-in-out infinite;transform-origin:50% 50%;filter:drop-shadow(0 20px 40px rgba(255,107,139,.45))}
+@keyframes fly{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-26px) rotate(6deg)}}
+.tail{stroke-dasharray:6 8;animation:dash 2s linear infinite}@keyframes dash{to{stroke-dashoffset:-28}}
+.lantern{position:absolute;bottom:-40px;border-radius:50% 50% 45% 45%;animation:rise linear forwards;opacity:.0}
+@keyframes rise{10%{opacity:.9}100%{transform:translateY(-110vh) translateX(var(--dx));opacity:0}}
+.flip{perspective:900px;cursor:pointer;height:210px}.flip>div{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+.flip.on>div,.flip:hover>div{transform:rotateY(180deg)}.flip .f,.flip .b{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;padding:1.25rem;border-radius:24px;border:1px solid rgba(255,255,255,.14)}
+.flip .f{background:rgba(255,255,255,.06)}.flip .b{transform:rotateY(180deg);background:linear-gradient(135deg,rgba(255,179,71,.2),rgba(139,123,255,.25))}
+.tab{cursor:pointer;transition:all .3s}.tab.on{background:linear-gradient(100deg,var(--sun),var(--rose));color:#1b1030;transform:scale(1.04)}
+.panel{display:none}.panel.on{display:grid;animation:pop .5s cubic-bezier(.2,.8,.2,1)}@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.98)}}
+.acc{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s}.acc.on{grid-template-rows:1fr}.acc>div{overflow:hidden}
+.seg{transition:flex .5s cubic-bezier(.2,.8,.2,1),filter .3s;cursor:pointer}.seg:hover{filter:brightness(1.2)}
+.gbar{transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.chk{transition:all .3s;cursor:pointer;text-align:left}.chk.done{border-color:var(--mint);background:rgba(122,240,192,.1)}.chk.done .tick{background:var(--mint);transform:scale(1.1) rotate(360deg)}.chk.done span.t{text-decoration:line-through;opacity:.6}
+.tick{transition:all .5s;width:26px;height:26px;border-radius:50%;border:2px solid var(--mint);flex:none;display:grid;place-items:center;color:#06281c;font-size:14px;font-weight:800}
+.star{position:fixed;pointer-events:none;z-index:70;width:12px;height:12px;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+:focus-visible{outline:2px solid var(--sky);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
 </head>
-<body class="font-sans antialiased text-ink selection:bg-accent selection:text-white">
+<body>
+<div id="bar"></div><div class="bg"></div>
+<div class="blob" style="width:420px;height:420px;background:var(--violet);top:10%;left:-8%"></div>
+<div class="blob" style="width:360px;height:360px;background:var(--rose);top:55%;right:-6%;animation-delay:-6s"></div>
+<div id="glow"></div>
 
-  <!-- NAV – sticky blur, hover effects, interactive logo -->
-  <nav class="nav-blur sticky top-0 z-50 py-4 px-6 md:px-12 flex justify-between items-center">
-    <!-- Logo with group hover -->
-    <a href="#" class="text-xl font-semibold tracking-tight flex items-center gap-2 group transition-transform active:scale-95">
-      <span class="text-accent text-2xl leading-none group-hover:rotate-180 transition-transform duration-700 ease-in-out">✶</span>
-      <span>Udaan<span class="text-accent group-hover:animate-pulse">.</span></span>
-    </a>
-    
-    <!-- Nav Links with sliding underline -->
-    <div class="hidden md:flex space-x-8 text-sm font-medium items-center">
-      <a href="#problem" class="nav-link text-ink/80 hover:text-ink transition-colors duration-200">Problem</a>
-      <a href="#solution" class="nav-link text-ink/80 hover:text-ink transition-colors duration-200">Solution</a>
-      <a href="#journey" class="nav-link text-ink/80 hover:text-ink transition-colors duration-200">Journey</a>
-      <a href="#features" class="nav-link text-ink/80 hover:text-ink transition-colors duration-200">Features</a>
-      <a href="#pilot" class="nav-link text-ink/80 hover:text-ink transition-colors duration-200">Pilot</a>
-      
-      <!-- CTA Button with fill-swipe hover effect -->
-      <a href="#next" class="group relative overflow-hidden bg-accent/10 border border-accent/30 text-accent px-5 py-2 rounded-full transition-all duration-300 active:scale-95 hover:shadow-[0_8px_20px_-6px_rgba(196,69,44,0.4)] hover:-translate-y-0.5">
-        <span class="relative z-10 group-hover:text-white transition-colors duration-300">Take action</span>
-        <div class="absolute inset-0 h-full w-0 bg-accent transition-all duration-300 ease-out group-hover:w-full z-0"></div>
-      </a>
-    </div>
-    
-    <!-- Mobile Menu Icon (Active state added) -->
-    <div class="md:hidden text-accent text-2xl cursor-pointer active:scale-90 transition-transform">☰</div>
-  </nav>
+<!-- NAV -->
+<header class="fixed top-3 inset-x-0 z-50 px-3" style="top:calc(env(safe-area-inset-top,0px) + .75rem)">
+ <nav class="glass !rounded-full max-w-5xl mx-auto flex items-center justify-between px-5 py-2.5">
+  <a href="#top" class="disp font-extrabold text-xl flex items-center gap-2"><span class="grad">Udaan</span></a>
+  <div class="hidden md:flex gap-6 text-sm text-[var(--mut)]">
+   <a class="hover:text-white transition" href="#problem">Problem</a><a class="hover:text-white transition" href="#pillars">Pillars</a><a class="hover:text-white transition" href="#journey">Journey</a><a class="hover:text-white transition" href="#safe">Safeguarding</a><a class="hover:text-white transition" href="#pilot">Pilot</a><a class="hover:text-white transition" href="#impact">Impact</a>
+  </div>
+  <a href="#next" class="btn !py-2 !px-4 text-sm" data-r>Next steps</a>
+ </nav>
+</header>
 
-  <!-- HERO SECTION -->
-  <section class="max-w-6xl mx-auto px-6 pt-20 pb-16 md:pt-28 md:pb-24 flex flex-col items-start relative">
-    <div class="inline-block bg-accent/10 text-accent text-xs font-semibold tracking-wider px-4 py-1.5 rounded-full mb-6 animate-fade-up">
-      <span class="inline-block w-1.5 h-1.5 bg-accent rounded-full mr-2 animate-pulse"></span>
-      SOCIAL IMPACT PROTOTYPE
-    </div>
-    <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.05] tracking-tight max-w-4xl animate-fade-up delay-100 opacity-0">
-      Every child's <span class="text-accent relative inline-block">dream<svg class="absolute -bottom-2 left-0 w-full text-accent/30" viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M0 15 Q 50 0 100 15" fill="none" stroke="currentColor" stroke-width="4"/></svg></span>,<br/>
-      every family's <span class="text-accent">hope</span>.
-    </h1>
-    <p class="mt-8 text-lg md:text-xl text-warmgray max-w-2xl leading-relaxed animate-fade-up delay-200 opacity-0">
-      Udaan is a child-centred development ecosystem — not just a donation platform, not an adoption intermediary.
-      We build emotional support, creative confidence, life skills, and long-term mentorship for children in institutional care.
-    </p>
-    <div class="mt-10 flex flex-wrap gap-4 animate-fade-up delay-300 opacity-0">
-      <a href="#solution" class="bg-accent text-white px-8 py-3.5 rounded-full font-medium shadow-[0_10px_25px_-5px_rgba(196,69,44,0.4)] hover:shadow-[0_15px_35px_-5px_rgba(196,69,44,0.5)] hover:-translate-y-1 transition-all duration-300 active:scale-95 group flex items-center gap-2">
-        Explore the four pillars 
-        <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
-      </a>
-      <a href="#pilot" class="border border-ink/20 px-8 py-3.5 rounded-full font-medium hover:border-accent hover:text-accent hover:bg-white transition-all duration-300 active:scale-95 shadow-sm hover:shadow-md">
-        Mumbai pilot
-      </a>
-    </div>
-  </section>
+<main id="top">
+<!-- HERO -->
+<section id="hero" class="relative min-h-screen flex items-center overflow-hidden pt-28 pb-16 px-5">
+ <div id="lanterns" class="absolute inset-0 pointer-events-none"></div>
+ <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center relative">
+  <div>
+   <p class="text-[var(--sun)] font-medium mb-4">Social impact initiative for children in institutional care</p>
+   <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold">Every child's dream, every family's hope.</h1>
+   <p class="mt-6 text-lg text-[var(--mut)] max-w-lg">Udaan helps children in orphanages, child-care institutions, schools and trusts find their voice, build skills and meet mentors, and it points interested families only to legal adoption channels.</p>
+   <div class="mt-8 flex flex-wrap gap-3">
+    <a href="#pillars" class="btn" data-r>Explore the four pillars</a>
+    <button class="btn ghost" id="wishBtn" data-r>Release a lantern</button>
+   </div>
+   <p class="mt-4 text-sm text-[var(--mut)]">Tip: click anywhere in this section to send up some sparks.</p>
+  </div>
+  <div class="relative grid place-items-center" id="kiteWrap">
+   <div class="absolute w-72 h-72 rounded-full bg-[var(--rose)] opacity-20 blur-3xl"></div>
+   <svg id="kite" class="kite w-72 sm:w-96" viewBox="0 0 300 420" aria-label="A kite flying upward">
+    <defs><linearGradient id="k1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb347"/><stop offset="1" stop-color="#ff6b8b"/></linearGradient><linearGradient id="k2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b7bff"/><stop offset="1" stop-color="#6ee7ff"/></linearGradient></defs>
+    <polygon points="150,10 270,130 150,270 30,130" fill="url(#k1)"/>
+    <polygon points="150,10 270,130 150,130" fill="url(#k2)" opacity=".85"/>
+    <polygon points="30,130 150,130 150,270" fill="#fff" opacity=".18"/>
+    <path d="M150 10V270M30 130H270" stroke="#fff" stroke-opacity=".5" stroke-width="2"/>
+    <path class="tail" d="M150 270C120 310 190 330 150 370S130 410 150 418" fill="none" stroke="#ffb347" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="140" cy="318" r="9" fill="#6ee7ff"/><circle cx="158" cy="362" r="9" fill="#8b7bff"/>
+   </svg>
+  </div>
+ </div>
+</section>
 
-  <!-- PROBLEM SECTION -->
-  <section id="problem" class="max-w-6xl mx-auto px-6 py-16 md:py-24 border-t border-ink/5 relative">
-    <div class="grid md:grid-cols-2 gap-12 items-start">
-      <div>
-        <h2 class="text-xs font-semibold tracking-[0.2em] text-accent uppercase mb-4">01 — The gap</h2>
-        <h3 class="text-3xl md:text-4xl font-bold tracking-tight mb-6">Children in care have shelter, food, schooling — but often lack consistent mentoring, creative expression, and a trusted adult.</h3>
-        <p class="text-warmgray leading-relaxed mb-8">Many institutionalised children struggle to express aspirations, identify strengths, or plan for life after care. The system has good intentions but fragmented support.</p>
-        <div class="bg-gradient-to-r from-accentSoft/40 to-transparent p-6 rounded-2xl border-l-4 border-accent hover:pl-8 transition-all duration-300">
-          <p class="italic text-ink/80 font-medium">"Udaan aims to turn care into opportunity and aspiration into a guided pathway."</p>
-        </div>
-      </div>
-      <div class="space-y-5">
-        <div class="card-hover bg-white/80 border border-ink/5 rounded-2xl p-6 backdrop-blur-md">
-          <div class="flex gap-4">
-            <span class="text-3xl group-hover:scale-110 transition-transform">🧠</span>
-            <div><h4 class="font-bold">Emotional support gap</h4><p class="text-sm text-warmgray mt-1">Limited access to stable, trusted adult mentors and individual encouragement.</p></div>
-          </div>
-        </div>
-        <div class="card-hover bg-white/80 border border-ink/5 rounded-2xl p-6 backdrop-blur-md">
-          <div class="flex gap-4">
-            <span class="text-3xl">🎨</span>
-            <div><h4 class="font-bold">Creative exposure gap</h4><p class="text-sm text-warmgray mt-1">Insufficient opportunities in dance, poetry, art, music, and self‑expression.</p></div>
-          </div>
-        </div>
-        <div class="card-hover bg-white/80 border border-ink/5 rounded-2xl p-6 backdrop-blur-md">
-          <div class="flex gap-4">
-            <span class="text-3xl">📚</span>
-            <div><h4 class="font-bold">Career guidance gap</h4><p class="text-sm text-warmgray mt-1">Limited awareness of careers, scholarships, and employability skills.</p></div>
-          </div>
-        </div>
-        <div class="card-hover bg-white/80 border border-ink/5 rounded-2xl p-6 backdrop-blur-md">
-          <div class="flex gap-4">
-            <span class="text-3xl">⚖️</span>
-            <div><h4 class="font-bold">Adoption‑awareness gap</h4><p class="text-sm text-warmgray mt-1">Prospective parents may not understand the authorised, child‑centred process.</p></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+<!-- PROBLEM -->
+<section id="problem" class="px-5 py-24">
+ <div class="max-w-6xl mx-auto">
+  <div class="rv max-w-2xl"><h2 class="text-4xl sm:text-5xl font-extrabold">Shelter and schooling are not the whole story.</h2>
+  <p class="mt-4 text-[var(--mut)]">Many children in care have food, a bed and classes, but little consistent mentoring, creative expression, career exposure or one-to-one attention. Some struggle to say what they hope for or plan for life after care. Six gaps stand in the way.</p></div>
+  <div id="gaps" class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+ </div>
+</section>
 
-  <!-- FOUR PILLARS -->
-  <section id="solution" class="bg-ink/[0.02] py-16 md:py-28">
-    <div class="max-w-6xl mx-auto px-6">
-      <h2 class="text-xs font-semibold tracking-[0.2em] text-accent uppercase mb-4">02 — Four‑pillar solution</h2>
-      <h3 class="text-3xl md:text-5xl font-bold tracking-tight mb-16 max-w-2xl">We don't just donate. We build ecosystems.</h3>
-      <div class="grid md:grid-cols-2 gap-8">
-        <!-- Pillar 1 -->
-        <div class="pillar-card bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-sm group">
-          <div class="text-accent text-5xl mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300 origin-bottom-left">🎭</div>
-          <h4 class="text-2xl font-bold mb-3 group-hover:text-accent transition-colors">Skill & Creativity Hubs</h4>
-          <p class="text-warmgray text-sm leading-relaxed mb-4">Weekly sessions: dance, theatre, poetry, art, digital literacy. Children build talent portfolios and confidence.</p>
-          <div class="flex flex-wrap gap-2 text-xs">
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">Dance</span>
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">Poetry</span>
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">Art</span>
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">Digital</span>
-          </div>
-        </div>
-        <!-- Pillar 2 -->
-        <div class="pillar-card bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-sm group">
-          <div class="text-accent text-5xl mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 origin-bottom-left">🧭</div>
-          <h4 class="text-2xl font-bold mb-3 group-hover:text-accent transition-colors">Dream Mapping & Mentorship</h4>
-          <p class="text-warmgray text-sm leading-relaxed mb-4">Dream journals, strength mapping, mentor matching, career discovery days, and pathway plans.</p>
-          <div class="flex flex-wrap gap-2 text-xs">
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">Journals</span>
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">Mentors</span>
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">Career days</span>
-          </div>
-        </div>
-        <!-- Pillar 3 -->
-        <div class="pillar-card bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-sm group">
-          <div class="text-accent text-5xl mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300 origin-bottom-left">🤝</div>
-          <h4 class="text-2xl font-bold mb-3 group-hover:text-accent transition-colors">Needs‑to‑Support Network</h4>
-          <p class="text-warmgray text-sm leading-relaxed mb-4">Verified institutional needs connected to donors, CSR, and volunteers. Transparency and dignity first.</p>
-          <div class="flex flex-wrap gap-2 text-xs">
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">Needs board</span>
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">CSR</span>
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">Impact updates</span>
-          </div>
-        </div>
-        <!-- Pillar 4 -->
-        <div class="pillar-card bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-sm group">
-          <div class="text-accent text-5xl mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 origin-bottom-left">⚖️</div>
-          <h4 class="text-2xl font-bold mb-3 group-hover:text-accent transition-colors">Responsible Adoption Referral</h4>
-          <p class="text-warmgray text-sm leading-relaxed mb-4">We never match or place children. We refer prospective parents to authorised agencies like CARA.</p>
-          <div class="flex flex-wrap gap-2 text-xs">
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">Awareness</span>
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">Legal referral</span>
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">No informal matching</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+<!-- VISION -->
+<section class="px-5 py-16">
+ <div class="max-w-6xl mx-auto grid md:grid-cols-5 gap-5">
+  <div class="glass tilt rv p-8 md:col-span-3"><h3 class="text-2xl font-bold text-[var(--sun)]">Vision</h3><p class="mt-3 text-2xl sm:text-3xl disp font-bold">A future where every child in institutional care is heard, supported, skilled, and able to pursue a meaningful life path.</p></div>
+  <div class="glass tilt rv p-8 md:col-span-2"><h3 class="text-2xl font-bold text-[var(--sky)]">Mission</h3><p class="mt-3 text-[var(--mut)]">Create safe, structured partnerships that provide creativity, mentorship, aspiration mapping, career guidance and need-based support to children.</p></div>
+  <div class="glass tilt rv p-7 md:col-span-2"><h3 class="font-bold text-lg">Primary beneficiaries</h3><p class="mt-2 text-[var(--mut)]">Children in partner child-care institutions, orphanages, schools and trusts.</p></div>
+  <div class="glass tilt rv p-7 md:col-span-3"><h3 class="font-bold text-lg">Secondary beneficiaries</h3><p class="mt-2 text-[var(--mut)]">Partner NGOs, volunteers, mentors, educators, counsellors, donors, and prospective adoptive parents seeking correct legal guidance.</p></div>
+ </div>
+</section>
 
-  <!-- USER JOURNEY -->
-  <section id="journey" class="max-w-6xl mx-auto px-6 py-16 md:py-28">
-    <h2 class="text-xs font-semibold tracking-[0.2em] text-accent uppercase mb-4">03 — User journey</h2>
-    <h3 class="text-3xl md:text-5xl font-bold tracking-tight mb-12">From onboarding to impact.</h3>
-    <div class="grid md:grid-cols-3 gap-5">
-      <div class="journey-step bg-white/60 border border-ink/5 rounded-2xl p-6 backdrop-blur-sm">
-        <span class="text-accent text-4xl font-bold opacity-40 group-hover:opacity-100 transition-opacity">01</span>
-        <h4 class="font-bold text-lg mt-2">Partner onboarding</h4>
-        <p class="text-xs text-warmgray mt-1">MoU, safeguarding checklist, focal person identified.</p>
-      </div>
-      <div class="journey-step bg-white/60 border border-ink/5 rounded-2xl p-6 backdrop-blur-sm">
-        <span class="text-accent text-4xl font-bold opacity-40 transition-opacity">02</span>
-        <h4 class="font-bold text-lg mt-2">Needs assessment</h4>
-        <p class="text-xs text-warmgray mt-1">Priority needs list & baseline data.</p>
-      </div>
-      <div class="journey-step bg-white/60 border border-ink/5 rounded-2xl p-6 backdrop-blur-sm">
-        <span class="text-accent text-4xl font-bold opacity-40 transition-opacity">03</span>
-        <h4 class="font-bold text-lg mt-2">Child participation</h4>
-        <p class="text-xs text-warmgray mt-1">Safe intro sessions, activity calendar.</p>
-      </div>
-      <div class="journey-step bg-white/60 border border-ink/5 rounded-2xl p-6 backdrop-blur-sm">
-        <span class="text-accent text-4xl font-bold opacity-40 transition-opacity">04</span>
-        <h4 class="font-bold text-lg mt-2">Workshops</h4>
-        <p class="text-xs text-warmgray mt-1">Attendance, feedback, talent samples.</p>
-      </div>
-      <div class="journey-step bg-white/60 border border-ink/5 rounded-2xl p-6 backdrop-blur-sm">
-        <span class="text-accent text-4xl font-bold opacity-40 transition-opacity">05</span>
-        <h4 class="font-bold text-lg mt-2">Dream mapping</h4>
-        <p class="text-xs text-warmgray mt-1">Individual aspiration & strengths profile.</p>
-      </div>
-      <div class="journey-step bg-white/60 border border-ink/5 rounded-2xl p-6 backdrop-blur-sm">
-        <span class="text-accent text-4xl font-bold opacity-40 transition-opacity">06</span>
-        <h4 class="font-bold text-lg mt-2">Mentorship & exposure</h4>
-        <p class="text-xs text-warmgray mt-1">Career pathway & confidence development.</p>
-      </div>
-      <div class="journey-step bg-white/60 border border-ink/5 rounded-2xl p-6 backdrop-blur-sm">
-        <span class="text-accent text-4xl font-bold opacity-40 transition-opacity">07</span>
-        <h4 class="font-bold text-lg mt-2">Support mobilisation</h4>
-        <p class="text-xs text-warmgray mt-1">Delivered resources & impact report.</p>
-      </div>
-      <div class="journey-step bg-white/60 border border-ink/5 rounded-2xl p-6 backdrop-blur-sm">
-        <span class="text-accent text-4xl font-bold opacity-40 transition-opacity">08</span>
-        <h4 class="font-bold text-lg mt-2">Adoption awareness</h4>
-        <p class="text-xs text-warmgray mt-1">Responsible legal referral, not placement.</p>
-      </div>
-      <div class="journey-step bg-white/60 border border-ink/5 rounded-2xl p-6 backdrop-blur-sm">
-        <span class="text-accent text-4xl font-bold opacity-40 transition-opacity">09</span>
-        <h4 class="font-bold text-lg mt-2">Monitoring</h4>
-        <p class="text-xs text-warmgray mt-1">Improved programme design & accountability.</p>
-      </div>
-    </div>
-  </section>
+<!-- PILLARS -->
+<section id="pillars" class="px-5 py-24">
+ <div class="max-w-6xl mx-auto">
+  <h2 class="rv text-4xl sm:text-5xl font-extrabold max-w-2xl">Four pillars, one child-centred ecosystem.</h2>
+  <div id="tabs" class="rv mt-10 flex flex-wrap gap-3"></div>
+  <div id="panels" class="mt-8"></div>
+ </div>
+</section>
 
-  <!-- PROTOTYPE FEATURES -->
-  <section id="features" class="bg-gradient-to-b from-accentSoft/20 to-transparent py-16 md:py-28">
-    <div class="max-w-6xl mx-auto px-6">
-      <h2 class="text-xs font-semibold tracking-[0.2em] text-accent uppercase mb-4">04 — Prototype features</h2>
-      <h3 class="text-3xl md:text-5xl font-bold tracking-tight mb-12">Tools that give voice, track progress, ensure safety.</h3>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="card-hover bg-white rounded-2xl p-6 border border-ink/5 group">
-          <span class="text-3xl float-icon inline-block group-hover:scale-125 transition-transform">📔</span>
-          <h4 class="font-bold mt-3 group-hover:text-accent transition-colors">Dream Journal</h4>
-          <p class="text-sm text-warmgray mt-1">Paper or secure digital record where children draw, write, or speak about goals.</p>
-        </div>
-        <div class="card-hover bg-white rounded-2xl p-6 border border-ink/5 group">
-          <span class="text-3xl float-icon inline-block delay-100 group-hover:scale-125 transition-transform">🛂</span>
-          <h4 class="font-bold mt-3 group-hover:text-accent transition-colors">Skill Passport</h4>
-          <p class="text-sm text-warmgray mt-1">Tracks workshop participation, interests, certificates, and achievements.</p>
-        </div>
-        <div class="card-hover bg-white rounded-2xl p-6 border border-ink/5 group">
-          <span class="text-3xl float-icon inline-block delay-200 group-hover:scale-125 transition-transform">📊</span>
-          <h4 class="font-bold mt-3 group-hover:text-accent transition-colors">Mentor Dashboard</h4>
-          <p class="text-sm text-warmgray mt-1">Secure volunteer tracking for sessions, notes, training status, and escalation.</p>
-        </div>
-        <div class="card-hover bg-white rounded-2xl p-6 border border-ink/5 group">
-          <span class="text-3xl float-icon inline-block delay-100 group-hover:scale-125 transition-transform">📋</span>
-          <h4 class="font-bold mt-3 group-hover:text-accent transition-colors">Needs Board</h4>
-          <p class="text-sm text-warmgray mt-1">Institution-approved list of items, services, and programme needs.</p>
-        </div>
-        <div class="card-hover bg-white rounded-2xl p-6 border border-ink/5 group">
-          <span class="text-3xl float-icon inline-block delay-200 group-hover:scale-125 transition-transform">🃏</span>
-          <h4 class="font-bold mt-3 group-hover:text-accent transition-colors">Career Path Cards</h4>
-          <p class="text-sm text-warmgray mt-1">Simple guides for nurse, dancer, teacher, designer, entrepreneur, engineer, chef.</p>
-        </div>
-        <div class="card-hover bg-white rounded-2xl p-6 border border-ink/5 group">
-          <span class="text-3xl float-icon inline-block delay-300 group-hover:scale-125 transition-transform">⚖️</span>
-          <h4 class="font-bold mt-3 group-hover:text-accent transition-colors">Adoption Info Page</h4>
-          <p class="text-sm text-warmgray mt-1">Explains legal process, directs users to authorised agencies. Reduces misinformation.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+<!-- JOURNEY -->
+<section id="journey" class="px-5 py-24">
+ <div class="max-w-4xl mx-auto">
+  <h2 class="rv text-4xl sm:text-5xl font-extrabold">From first hello to a guided pathway.</h2>
+  <p class="rv mt-4 text-[var(--mut)]">Nine steps, each with a clear output. Tap a step to see what it produces.</p>
+  <div class="relative mt-12 pl-10 sm:pl-14">
+   <div class="absolute left-3 sm:left-5 top-0 bottom-0 w-1 rounded bg-white/10"><div id="line" class="w-full rounded bg-gradient-to-b from-[var(--sun)] to-[var(--violet)]" style="height:0"></div></div>
+   <div id="steps" class="space-y-5"></div>
+  </div>
+ </div>
+</section>
 
-  <!-- SAFEGUARDING -->
-  <section class="max-w-6xl mx-auto px-6 py-16 md:py-20">
-    <div class="bg-white/80 rounded-3xl p-8 md:p-12 border border-ink/5 shadow-sm hover:shadow-lg border-l-8 border-l-accent flex flex-col md:flex-row gap-8 items-start transition-shadow duration-300">
-      <div class="text-6xl animate-pulse-soft">🛡️</div>
-      <div>
-        <h3 class="text-2xl md:text-3xl font-bold tracking-tight">Safeguarding is non‑negotiable</h3>
-        <p class="text-warmgray mt-3 max-w-2xl leading-relaxed">Background checks, child‑safeguarding orientation, no private contact, no public sharing of identities. Clear grievance and escalation routes. We refer only to authorised legal channels for adoption.</p>
-        <div class="mt-6 flex flex-wrap gap-3 text-sm">
-          <span class="feature-tag border border-ink/10 rounded-full px-4 py-1.5 bg-paper">Police verification</span>
-          <span class="feature-tag border border-ink/10 rounded-full px-4 py-1.5 bg-paper">Boundaries training</span>
-          <span class="feature-tag border border-ink/10 rounded-full px-4 py-1.5 bg-paper">Consent protocols</span>
-        </div>
-      </div>
-    </div>
-  </section>
+<!-- FEATURES -->
+<section id="features" class="px-5 py-24">
+ <div class="max-w-6xl mx-auto">
+  <h2 class="rv text-4xl sm:text-5xl font-extrabold max-w-2xl">Seven prototype features. Flip each card.</h2>
+  <div id="feats" class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+ </div>
+</section>
 
-  <!-- PILOT PLAN -->
-  <section id="pilot" class="max-w-6xl mx-auto px-6 py-16 md:py-24">
-    <div class="grid md:grid-cols-2 gap-12">
-      <div>
-        <h2 class="text-xs font-semibold tracking-[0.2em] text-accent uppercase mb-4">05 — Mumbai pilot · 6 months</h2>
-        <h3 class="text-3xl font-bold tracking-tight mb-6">From foundation to showcase.</h3>
-        <div class="space-y-4">
-          <div class="flex gap-4 items-start group"><span class="text-accent font-bold w-16 group-hover:translate-x-1 transition-transform">M1</span><p class="text-sm text-ink/80 group-hover:text-ink transition-colors">Select 2 partner institutions; MoU, safeguarding policy, baseline survey.</p></div>
-          <div class="flex gap-4 items-start group"><span class="text-accent font-bold w-16 group-hover:translate-x-1 transition-transform">M2</span><p class="text-sm text-ink/80 group-hover:text-ink transition-colors">Recruit 10–15 volunteers; orientation; workshop calendar.</p></div>
-          <div class="flex gap-4 items-start group"><span class="text-accent font-bold w-16 group-hover:translate-x-1 transition-transform">M3–4</span><p class="text-sm text-ink/80 group-hover:text-ink transition-colors">Weekly sessions in creativity, dance, poetry, dream mapping.</p></div>
-          <div class="flex gap-4 items-start group"><span class="text-accent font-bold w-16 group-hover:translate-x-1 transition-transform">M4</span><p class="text-sm text-ink/80 group-hover:text-ink transition-colors">Assign supervised mentors, hold first Career Discovery Day.</p></div>
-          <div class="flex gap-4 items-start group"><span class="text-accent font-bold w-16 group-hover:translate-x-1 transition-transform">M5</span><p class="text-sm text-ink/80 group-hover:text-ink transition-colors">Publish verified needs board, approach donors/CSR.</p></div>
-          <div class="flex gap-4 items-start group"><span class="text-accent font-bold w-16 group-hover:translate-x-1 transition-transform">M6</span><p class="text-sm text-ink/80 group-hover:text-ink transition-colors">Outcome review & Udaan Mela talent showcase.</p></div>
-        </div>
-        <div class="mt-8 bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-ink/10 shadow-sm hover:shadow-md transition-shadow">
-          <h4 class="font-bold mb-2">Indicative budget</h4>
-          <div class="flex justify-between text-sm py-1 border-b border-ink/5 hover:bg-ink/5 px-2 -mx-2 rounded transition-colors"><span>Workshop materials</span><span>₹50,000</span></div>
-          <div class="flex justify-between text-sm py-1 border-b border-ink/5 hover:bg-ink/5 px-2 -mx-2 rounded transition-colors"><span>Volunteer training & checks</span><span>₹35,000</span></div>
-          <div class="flex justify-between text-sm py-1 border-b border-ink/5 hover:bg-ink/5 px-2 -mx-2 rounded transition-colors"><span>Website/forms/database</span><span>₹20,000</span></div>
-          <div class="flex justify-between text-sm py-1 border-b border-ink/5 hover:bg-ink/5 px-2 -mx-2 rounded transition-colors"><span>Counsellor support</span><span>₹30,000</span></div>
-          <div class="flex justify-between text-sm py-1 border-b border-ink/5 hover:bg-ink/5 px-2 -mx-2 rounded transition-colors"><span>Career Day & Mela</span><span>₹40,000</span></div>
-          <div class="flex justify-between text-sm py-1 border-b border-ink/5 hover:bg-ink/5 px-2 -mx-2 rounded transition-colors"><span>Monitoring & contingency</span><span>₹25,000</span></div>
-          <div class="flex justify-between font-bold pt-2 px-2 -mx-2 text-accent"><span>Total</span><span>₹2,00,000</span></div>
-        </div>
-      </div>
-      <div>
-        <h2 class="text-xs font-semibold tracking-[0.2em] text-accent uppercase mb-4">Success metrics</h2>
-        <div class="grid grid-cols-2 gap-4">
-          <div class="bg-white/80 p-5 rounded-2xl border border-ink/5 hover:border-accent/30 hover:-translate-y-1 hover:shadow-md transition-all duration-300"><span class="text-3xl font-bold stat-number">100</span><p class="text-xs text-warmgray mt-1">children engaged</p></div>
-          <div class="bg-white/80 p-5 rounded-2xl border border-ink/5 hover:border-accent/30 hover:-translate-y-1 hover:shadow-md transition-all duration-300"><span class="text-3xl font-bold stat-number">40+</span><p class="text-xs text-warmgray mt-1">workshops</p></div>
-          <div class="bg-white/80 p-5 rounded-2xl border border-ink/5 hover:border-accent/30 hover:-translate-y-1 hover:shadow-md transition-all duration-300"><span class="text-3xl font-bold stat-number">80</span><p class="text-xs text-warmgray mt-1">Dream Journals</p></div>
-          <div class="bg-white/80 p-5 rounded-2xl border border-ink/5 hover:border-accent/30 hover:-translate-y-1 hover:shadow-md transition-all duration-300"><span class="text-3xl font-bold stat-number">25</span><p class="text-xs text-warmgray mt-1">trained mentors</p></div>
-          <div class="bg-white/80 p-5 rounded-2xl border border-ink/5 hover:border-accent/30 hover:-translate-y-1 hover:shadow-md transition-all duration-300"><span class="text-3xl font-bold stat-number">10+</span><p class="text-xs text-warmgray mt-1">needs addressed</p></div>
-          <div class="bg-white/80 p-5 rounded-2xl border border-ink/5 hover:border-accent/30 hover:-translate-y-1 hover:shadow-md transition-all duration-300"><span class="text-3xl font-bold stat-number">100%</span><p class="text-xs text-warmgray mt-1">safeguarding trained</p></div>
-        </div>
-        <div class="mt-8">
-          <h4 class="font-semibold text-sm mb-3 tracking-wide">Core team roles</h4>
-          <div class="flex flex-wrap gap-2 text-xs">
-            <span class="feature-tag border border-ink/10 bg-white rounded-full px-3 py-1">Programme Lead</span>
-            <span class="feature-tag border border-ink/10 bg-white rounded-full px-3 py-1">Safeguarding Lead</span>
-            <span class="feature-tag border border-ink/10 bg-white rounded-full px-3 py-1">Institution Coordinator</span>
-            <span class="feature-tag border border-ink/10 bg-white rounded-full px-3 py-1">Facilitators</span>
-            <span class="feature-tag border border-ink/10 bg-white rounded-full px-3 py-1">Mentor Coordinator</span>
-            <span class="feature-tag border border-ink/10 bg-white rounded-full px-3 py-1">Counsellor</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+<!-- DREAM DEMO -->
+<section class="px-5 py-20">
+ <div class="max-w-3xl mx-auto glass rv p-8 sm:p-10 text-center">
+  <h2 class="text-3xl sm:text-4xl font-extrabold">Try a Dream Journal moment</h2>
+  <p class="mt-3 text-[var(--mut)]">In every workshop, children finish the line "What I want to learn or become…". Type your own and watch it take off. Nothing is saved or sent.</p>
+  <form id="dreamForm" class="mt-6 flex flex-col sm:flex-row gap-3" onsubmit="return false">
+   <input id="dreamIn" maxlength="40" placeholder="A dancer, a doctor, a chef…" class="flex-1 rounded-full px-5 py-3 bg-white/10 border border-white/20 outline-none focus:border-[var(--sun)] transition placeholder:text-white/40" aria-label="Your dream">
+   <button class="btn justify-center" id="dreamBtn" data-r type="button">Launch my dream</button>
+  </form>
+  <div id="sky" class="relative mt-6 h-40 rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-t from-[#2b1b5e]/60 to-transparent"><p class="absolute inset-0 grid place-items-center text-white/30 text-sm">Your dreams appear here</p></div>
+ </div>
+</section>
 
-  <!-- CTA -->
-  <section id="next" class="max-w-6xl mx-auto px-6 pb-20 pt-8">
-    <div class="relative bg-accent text-white rounded-3xl p-10 md:p-16 text-center hover:shadow-[0_20px_50px_-12px_rgba(196,69,44,0.6)] transition-all duration-500 overflow-hidden group">
-      <!-- Background decorative circle -->
-      <div class="absolute -top-24 -right-24 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
-      
-      <h3 class="relative z-10 text-3xl md:text-5xl font-bold tracking-tight mb-4">Ready to build Udaan?</h3>
-      <p class="relative z-10 text-white/90 max-w-xl mx-auto mb-8 font-light">Identify two Mumbai-based child-care institutions, create safeguarding policy, recruit facilitators, and launch Dream Journals.</p>
-      
-      <div class="relative z-10 flex flex-wrap justify-center gap-4">
-        <a href="#" class="bg-white text-accent px-8 py-3.5 rounded-full font-medium hover:bg-paper hover:-translate-y-1 transition-all duration-300 active:scale-95 shadow-lg">Partner with us</a>
-        <a href="#" class="border border-white/40 px-8 py-3.5 rounded-full font-medium hover:bg-white/10 hover:border-white hover:-translate-y-1 transition-all duration-300 active:scale-95">Volunteer</a>
-      </div>
-      <p class="relative z-10 text-xs text-white/60 mt-8">Udaan is a prototype. Adoption referrals only through authorised agencies.</p>
-    </div>
-  </section>
+<!-- SAFEGUARDING -->
+<section id="safe" class="px-5 py-24">
+ <div class="max-w-6xl mx-auto">
+  <h2 class="rv text-4xl sm:text-5xl font-extrabold max-w-3xl">Child safety is the foundation.</h2>
+  <p class="rv mt-4 text-[var(--mut)] max-w-2xl">All engagement is institution-approved, age-appropriate, voluntary where possible and monitored.</p>
+  <div id="safeList" class="mt-10 grid md:grid-cols-2 gap-4"></div>
+ </div>
+</section>
 
-  <!-- FOOTER -->
-  <footer class="border-t border-ink/10 py-8 text-center text-xs text-warmgray">
-    <p>© 2026 Udaan · Every child's dream, every family's hope.</p>
-    <p class="mt-2">This is a social-impact prototype. Not an adoption intermediary.</p>
-  </footer>
+<!-- PILOT -->
+<section id="pilot" class="px-5 py-24">
+ <div class="max-w-6xl mx-auto">
+  <h2 class="rv text-4xl sm:text-5xl font-extrabold">Mumbai pilot: six months.</h2>
+  <p class="rv mt-4 text-[var(--mut)]">Select a phase to see its actions and output.</p>
+  <div class="glass rv mt-10 p-5 sm:p-8">
+   <div class="grid grid-cols-6 text-center text-xs text-[var(--mut)] mb-3 pl-0 sm:pl-44"><span>Month 1</span><span>Month 2</span><span>Month 3</span><span>Month 4</span><span>Month 5</span><span>Month 6</span></div>
+   <div id="gantt" class="space-y-2"></div>
+   <div id="phaseInfo" class="mt-6 p-5 rounded-2xl bg-white/5 border border-white/10 min-h-[110px]"></div>
+  </div>
+
+  <h3 class="rv mt-20 text-3xl font-extrabold">A two-hour workshop, minute by minute</h3>
+  <div class="rv mt-6 flex gap-2 h-20" id="ws"></div>
+  <div id="wsInfo" class="rv mt-4 glass p-6"></div>
+ </div>
+</section>
+
+<!-- IMPACT -->
+<section id="impact" class="px-5 py-24">
+ <div class="max-w-6xl mx-auto">
+  <h2 class="rv text-4xl sm:text-5xl font-extrabold">What success looks like.</h2>
+  <div id="kpis" class="mt-10 grid grid-cols-2 lg:grid-cols-3 gap-5"></div>
+  <div class="glass rv mt-5 p-6"><h3 class="font-bold text-lg text-[var(--mint)]">Wellbeing</h3><p class="text-[var(--mut)] mt-1">Improvement in confidence and participation, measured with pre and post child-friendly feedback and staff observations.</p></div>
+
+  <h3 class="rv mt-20 text-3xl font-extrabold">Where the ₹2,00,000 goes</h3>
+  <div id="budget" class="glass rv mt-6 p-6 sm:p-8 space-y-4"></div>
+ </div>
+</section>
+
+<!-- TEAM + RISKS -->
+<section class="px-5 py-24">
+ <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12">
+  <div><h2 class="rv text-4xl font-extrabold">The team</h2><div id="team" class="mt-8 space-y-3"></div></div>
+  <div><h2 class="rv text-4xl font-extrabold">Risks and how we handle them</h2><div id="risks" class="mt-8 space-y-3"></div></div>
+ </div>
+</section>
+
+<!-- PITCH -->
+<section class="px-5 py-24">
+ <div class="max-w-4xl mx-auto text-center rv">
+  <p class="disp text-2xl sm:text-4xl font-bold leading-snug">Udaan is not only a donation platform and not an adoption intermediary. It is a child-centred development ecosystem that turns <span class="grad">care into opportunity</span> and aspiration into a guided pathway.</p>
+ </div>
+</section>
+
+<!-- NEXT -->
+<section id="next" class="px-5 py-24">
+ <div class="max-w-3xl mx-auto">
+  <h2 class="rv text-4xl sm:text-5xl font-extrabold">Immediate next steps</h2>
+  <p class="rv mt-3 text-[var(--mut)]">Tick items off to see how the pilot comes together.</p>
+  <div class="mt-6 h-3 rounded-full bg-white/10 overflow-hidden"><div id="prog" class="h-full w-0 rounded-full bg-gradient-to-r from-[var(--mint)] to-[var(--sky)] transition-all duration-700"></div></div>
+  <p id="progTxt" class="mt-2 text-sm text-[var(--mut)]">0 of 8 done</p>
+  <div id="todo" class="mt-6 space-y-3"></div>
+ </div>
+</section>
+</main>
+
+<footer class="px-5 py-12 text-center text-[var(--mut)] border-t border-white/10">
+ <p class="disp text-2xl font-extrabold"><span class="grad">Udaan</span></p>
+ <p class="mt-1">Bridging Dreams &amp; Families</p>
+ <p class="mt-4 text-sm">Prototype prepared for social-impact pilot planning.</p>
+</footer>
+
+<script>
+const $=s=>document.querySelector(s), el=(h)=>{const t=document.createElement('template');t.innerHTML=h.trim();return t.content.firstChild};
+const C=['#ffb347','#ff6b8b','#8b7bff','#6ee7ff','#7af0c0'];
+
+/* DATA */
+const gaps=[["💛","Emotional support","Limited access to stable, trusted adult mentors and individual encouragement."],["🎨","Creative exposure","Few chances for dance, poetry, storytelling, art, music and self-expression."],["🧭","Career guidance","Little awareness of careers, education pathways, scholarships and employability skills."],["💻","Digital and life skills","Uneven access to communication, digital literacy, financial awareness and confidence-building."],["🤝","Coordination","NGOs, institutions, volunteers, counsellors, donors and legal adoption agencies often work separately."],["📘","Adoption awareness","Prospective parents may not understand the authorised, child-centred adoption process."]];
+const pillars=[
+ {n:"Skill and Creativity Hubs",c:C[0],d:"Weekly or fortnightly sessions at partner institutions, run by screened volunteers and trainers, help children explore talents, build confidence and share feelings safely.",l:["Dance, movement, yoga, theatre and performance","Poetry, storytelling, reading circles and creative writing","Drawing, art, craft, music and photography","Basic digital literacy, presentation and communication skills","Talent portfolios: selected work, certificates, videos and progress records"]},
+ {n:"Dream Mapping and Mentorship",c:C[1],d:"Each child is supported to identify interests, strengths, hopes and possible careers. The aim is not to force a decision but to give exposure, language, confidence and a practical pathway.",l:["Dream Journal: write, draw or record what you want to become and why","Strength Mapping: mentors observe creativity, leadership, sport, technology, communication or caregiving","Mentor Matching: trained volunteers for periodic, supervised engagement","Career Discovery Days with professionals, students, entrepreneurs, artists and vocational experts","Pathway Plan: subjects, courses, scholarships, entrance requirements or skill programmes"]},
+ {n:"Needs-to-Support Network",c:C[2],d:"Udaan captures verified institutional needs and connects them with donors, CSR teams and community volunteers. Support is institution-approved, transparent and focused on dignity, not one-time charity.",l:["Needs assessment: education, health, hygiene, learning materials, clothing, transport, devices, counselling, recreation","Priority board separating urgent, short-term and long-term needs","Verified requests routed through the partner institution","Impact updates that protect children's privacy","CSR and donor partnerships for sustained programmes"]},
+ {n:"Responsible NGO and Adoption Referral Bridge",c:C[3],d:"Udaan may educate prospective adoptive parents and refer them only to authorised channels. It never matches, markets, displays or directly places children. Adoption in India follows the Juvenile Justice framework and the Adoption Regulations, and children must be legally declared free for adoption.",l:["Awareness sessions on the official adoption route and realistic expectations","Referral to CARA-recognised Specialised Adoption Agencies and official systems","No informal child matching, no payment for a child, no public sharing of children's identities","Optional post-adoption wellbeing resources via qualified counsellors and authorised partners"]}];
+const steps=[["Partner onboarding","Identify and verify orphanages, child-care institutions, schools and trusts.","MoU, safeguarding checklist, focal person identified"],["Needs assessment","Meet institution staff and assess child-centred needs, facilities and programme gaps.","Priority needs list and baseline data"],["Child participation","Safe introductory sessions with institutional consent procedures.","Participant group and activity calendar"],["Workshops","Dance, poetry, art, communication and digital/life-skills sessions.","Attendance, feedback, talent samples"],["Dream mapping","Journals, conversations and supervised mentor sessions.","Individual aspiration and strengths profile"],["Mentorship and exposure","Connect children to trained mentors, role models and career events.","Career pathway and confidence development"],["Support mobilisation","Connect verified needs with donors, CSR teams and volunteers.","Delivered resources and impact report"],["Adoption awareness","Refer prospective parents to authorised agencies and official procedures only.","Responsible legal referral, not placement"],["Monitoring","Review outcomes monthly with the partner institution.","Improved programme design and accountability"]];
+const feats=[["Dream Journal","📓","Paper booklet or secure digital record where children draw, write or speak about goals.","Gives children voice and captures aspirations."],["Skill Passport","🎫","Tracks workshop participation, interests, certificates and achievements.","Builds confidence and a portfolio of progress."],["Mentor Dashboard","📊","Secure volunteer tracking for sessions, notes, training status and escalation needs.","Promotes consistent, accountable mentoring."],["Needs Board","📌","Institution-approved list of items, services and programme needs.","Makes support transparent and targeted."],["Career Path Cards","🗂️","Simple guides for nurse, dancer, teacher, designer, entrepreneur, engineer or chef.","Turns dreams into understandable next steps."],["NGO Partner Directory","📇","Verified contact and capability information for partner institutions and service providers.","Improves collaboration and referrals."],["Adoption Information Page","ℹ️","Explains the legal process and directs users to authorised agencies.","Reduces misinformation and protects children."]];
+const safe=["Police/background verification and child-safeguarding orientation for volunteers where the partner institution requires it.","No private meetings with children, no taking them off-site, no exchanging personal contact details, no promising personal financial support without approval.","No posting of children's names, faces, histories, medical information or adoption status without valid written consent and institutional/legal approval.","Clear boundaries: volunteers are mentors, not substitute parents or informal guardians.","A grievance and escalation route for children, staff, volunteers and partners.","Mental-health concerns, abuse disclosures and protection risks go immediately to designated institution and child-protection professionals.","Adoption information and referrals use authorised legal channels only."];
+const phases=[["Foundation",1,1,"Select 2 partner institutions; prepare MoU, safeguarding policy and baseline survey.","Pilot sites and compliance framework."],["Volunteer setup",2,2,"Recruit 10–15 volunteers; conduct orientation; finalise workshop calendar.","Prepared facilitator team."],["Programme launch",3,4,"Run weekly sessions in creativity, dance, poetry and dream mapping.","Regular participation and Dream Journals."],["Mentorship launch",4,4,"Assign supervised mentors and hold the first Career Discovery Day.","Mentor-child engagement plans."],["Support mobilisation",5,5,"Publish the verified needs board and approach donors and CSR partners.","Resource support for priority gaps."],["Review and showcase",6,6,"Outcome review and the Udaan Mela talent showcase.","Impact report, learnings, scale decision."]];
+const ws=[["0–15","Icebreaker","“My name and one thing I enjoy.”","Build safety and participation.",15],["15–45","Dance or movement","A movement activity for the whole group.","Energy, teamwork and self-expression.",30],["45–75","Poetry prompt","“If I could fly, I would…”","Emotional expression and imagination.",30],["75–105","Dream Journal","Draw or write “What I want to learn or become.”","Identify aspirations and interests.",30],["105–120","Closing circle","Group sharing, appreciation and closing reflection.","Confidence and positive reinforcement.",15]];
+const kpis=[[100,"","Children engaged across 2 institutions","Attendance records"],[40,"+","Structured workshops completed","Session reports and work samples"],[80,"","Dream Journals completed","Secure programme records"],[25,"","Trained mentors active","Attendance and supervision logs"],[10,"+","Verified priority needs addressed","Institution confirmation, donor reports"],[100,"%","Volunteers trained on safeguarding","Training attendance, signed code of conduct"]];
+const budget=[["Workshop materials: art, stationery, creative supplies",50000],["Volunteer training, background checks, local travel",35000],["Website, forms, database and communication tools",20000],["Counsellor or specialist session support",30000],["Career Discovery Day and Udaan Mela",40000],["Monitoring, documentation and contingency",25000]];
+const team=[["Programme Lead","Overall strategy, partner relationships, budget and outcomes."],["Child Safeguarding Lead","Volunteer screening, policies, incident escalation and compliance."],["Institution Coordinator","Schedules activities with each partner and gathers feedback."],["Workshop Facilitators","Dance, poetry, art, digital and life-skills sessions."],["Mentor Coordinator","Recruits, trains, matches and supervises mentors."],["Counsellor / Advisor","Supports referral pathways and emotional wellbeing programmes."],["Technology / Documentation Volunteer","Maintains secure records, dashboards and impact reports."]];
+const risks=[["Child safety or boundary violations","Mandatory safeguarding training, controlled access, supervision and clear reporting mechanisms."],["Unreliable volunteer participation","A volunteer pool, attendance system and backup facilitators."],["Unrealistic expectations","Clear communication; no promises of personal sponsorship, jobs or adoption."],["Privacy breach","Consent protocols, restricted data access and no unauthorised social-media sharing."],["Legal risk around adoption","No direct placement; refer only to authorised agencies and official processes."],["Short-term donation dependency","Build CSR partnerships and recurring programme sponsorships."]];
+const todo=["Identify two Mumbai-based child-care institutions or trusts willing to host the pilot.","Create a one-page safeguarding policy, volunteer code of conduct and partner MoU.","Recruit a small, trained team of creative facilitators and mentors.","Run a needs assessment and co-design the first four workshops with institution staff.","Launch Dream Journals and keep secure, non-public programme records.","Create a verified needs board for donors and CSR partners.","Build an adoption-awareness page that only links to authorised channels.","Measure results after six months and decide whether to scale."];
+
+/* RENDER */
+const G=(h,cls='')=>`<div class="glass tilt rv ${cls}">${h}</div>`;
+$('#gaps').innerHTML=gaps.map(g=>G(`<div class="p-6"><div class="text-3xl">${g[0]}</div><h3 class="mt-3 text-xl font-bold">${g[1]}</h3><p class="mt-1 text-[var(--mut)]">${g[2]}</p></div>`)).join('');
+$('#tabs').innerHTML=pillars.map((p,i)=>`<button class="tab glass !rounded-full px-5 py-2.5 text-sm font-bold ${i?'':'on'}" data-r data-i="${i}">Pillar ${i+1}: ${p.n.split(' and ')[0]}</button>`).join('');
+$('#panels').innerHTML=pillars.map((p,i)=>`<div class="panel glass p-7 sm:p-10 gap-8 md:grid-cols-2 ${i?'':'on'}"><div><h3 class="text-3xl font-extrabold" style="color:${p.c}">${p.n}</h3><p class="mt-4 text-[var(--mut)]">${p.d}</p></div><ul class="space-y-3">${p.l.map(x=>`<li class="flex gap-3 p-3 rounded-2xl bg-white/5 hover:bg-white/10 hover:translate-x-1 transition"><span class="mt-2 w-2.5 h-2.5 rounded-full flex-none" style="background:${p.c}"></span><span>${x}</span></li>`).join('')}</ul></div>`).join('');
+$('#steps').innerHTML=steps.map((s,i)=>`<div class="rv relative"><span class="absolute -left-[2.9rem] sm:-left-[3.9rem] top-4 w-8 h-8 rounded-full grid place-items-center text-sm font-extrabold text-[#1b1030]" style="background:${C[i%5]}">${i+1}</span><button class="glass tilt w-full text-left p-5" data-open aria-expanded="false"><h3 class="text-xl font-bold">${s[0]}</h3><p class="text-[var(--mut)] mt-1">${s[1]}</p><div class="acc"><div><p class="mt-3 text-sm font-bold" style="color:${C[i%5]}">Output: <span class="text-white font-medium">${s[2]}</span></p></div></div></button></div>`).join('');
+$('#feats').innerHTML=feats.map(f=>`<div class="flip rv" tabindex="0" role="button" aria-label="Flip ${f[0]}"><div><div class="f"><div class="text-4xl">${f[1]}</div><h3 class="mt-3 text-xl font-bold">${f[0]}</h3><p class="mt-1 text-sm text-[var(--mut)]">${f[2]}</p></div><div class="b grid content-center"><p class="text-xs font-bold text-[var(--sun)]">Value created</p><p class="text-lg font-bold mt-1">${f[3]}</p></div></div></div>`).join('');
+$('#safeList').innerHTML=safe.map((s,i)=>G(`<div class="p-5 flex gap-4"><span class="text-2xl">🛡️</span><p>${s}</p></div>`)).join('');
+$('#gantt').innerHTML=phases.map((p,i)=>`<button class="w-full grid sm:grid-cols-[11rem_1fr] items-center gap-2 text-left group" data-ph="${i}"><span class="text-sm font-bold group-hover:text-[var(--sun)] transition">${p[0]}</span><span class="grid grid-cols-6 h-9 rounded-full bg-white/5"><span class="rounded-full transition group-hover:brightness-125 group-hover:scale-y-110 ph-bar" style="grid-column:${p[1]}/${p[2]+1};background:${C[i%5]}"></span></span></button>`).join('');
+$('#ws').innerHTML=ws.map((w,i)=>`<button class="seg rounded-2xl text-[#1b1030] font-bold text-sm sm:text-base px-1 grid place-items-center" style="flex:${w[4]};background:${C[i]}" data-w="${i}">${w[0]}<br><span class="text-[10px] font-medium hidden sm:block">min</span></button>`).join('');
+$('#kpis').innerHTML=kpis.map(k=>G(`<div class="p-6"><div class="disp text-5xl font-extrabold grad"><span data-n="${k[0]}">0</span>${k[1]}</div><p class="mt-2 font-bold">${k[2]}</p><p class="text-sm text-[var(--mut)]">${k[3]}</p></div>`)).join('');
+const max=Math.max(...budget.map(b=>b[1]));
+$('#budget').innerHTML=budget.map((b,i)=>`<div class="group"><div class="flex justify-between gap-4 text-sm sm:text-base"><span>${b[0]}</span><span class="font-bold whitespace-nowrap">₹${b[1].toLocaleString('en-IN')}</span></div><div class="mt-1.5 h-3 rounded-full bg-white/10 overflow-hidden"><div class="gbar h-full w-0 rounded-full group-hover:brightness-125" data-w="${b[1]/max*100}" style="background:${C[i%5]}"></div></div></div>`).join('')+`<div class="pt-4 border-t border-white/10 flex justify-between disp text-xl font-extrabold"><span>Total 6-month pilot budget</span><span class="grad">₹2,00,000</span></div>`;
+$('#team').innerHTML=team.map(t=>G(`<div class="p-5 !py-4"><h3 class="font-bold">${t[0]}</h3><p class="text-sm text-[var(--mut)]">${t[1]}</p></div>`)).join('');
+$('#risks').innerHTML=risks.map(r=>`<div class="glass rv"><button class="w-full text-left p-5 flex justify-between gap-4 items-center font-bold" data-open aria-expanded="false"><span>${r[0]}</span><span class="plus text-2xl text-[var(--sun)] transition-transform">+</span></button><div class="acc"><div><p class="px-5 pb-5 text-[var(--mut)]"><span class="text-[var(--mint)] font-bold">Mitigation: </span>${r[1]}</p></div></div></div>`).join('');
+$('#todo').innerHTML=todo.map((t,i)=>`<button class="chk glass w-full flex items-center gap-4 p-4 rv" data-r><span class="tick"></span><span class="t">${t}</span></button>`).join('');
+
+/* INTERACTIONS */
+document.addEventListener('mousemove',e=>{const g=$('#glow');g.style.left=e.clientX+'px';g.style.top=e.clientY+'px'});
+document.addEventListener('pointermove',e=>{const c=e.target.closest&&e.target.closest('.glass');if(c){const r=c.getBoundingClientRect();c.style.setProperty('--mx',e.clientX-r.left+'px');c.style.setProperty('--my',e.clientY-r.top+'px')}});
+document.querySelectorAll('.tilt').forEach(c=>{
+ c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform=`perspective(800px) rotateY(${x*8}deg) rotateX(${-y*8}deg) translateY(-4px)`});
+ c.addEventListener('mouseleave',()=>c.style.transform='')});
+document.addEventListener('click',e=>{const b=e.target.closest('.btn,[data-r]');if(b){b.style.position=b.style.position||'relative';b.style.overflow='hidden';const r=b.getBoundingClientRect(),s=Math.max(r.width,r.height),d=document.createElement('span');d.className='ripple';d.style.cssText=`width:${s}px;height:${s}px;left:${e.clientX-r.left-s/2}px;top:${e.clientY-r.top-s/2}px`;b.appendChild(d);setTimeout(()=>d.remove(),600)}});
+function spark(x,y,n=14){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;for(let i=0;i<n;i++){const s=document.createElement('i');s.className='star';s.style.background=C[i%5];s.style.left=x+'px';s.style.top=y+'px';document.body.appendChild(s);const a=Math.random()*6.28,d=50+Math.random()*90;s.animate([{transform:'translate(0,0) scale(1) rotate(0)',opacity:1},{transform:`translate(${Math.cos(a)*d}px,${Math.sin(a)*d-40}px) scale(0) rotate(240deg)`,opacity:0}],{duration:900,easing:'cubic-bezier(.2,.8,.2,1)'}).onfinish=()=>s.remove()}}
+$('#hero').addEventListener('click',e=>spark(e.clientX,e.clientY));
+document.querySelectorAll('.btn,.chk,.flip,[data-open],.tab,[data-ph],[data-w]').forEach(b=>b.addEventListener('click',e=>spark(e.clientX,e.clientY,8)));
+
+/* lanterns */
+function lantern(x){const l=document.createElement('div'),s=14+Math.random()*22,c=C[Math.floor(Math.random()*5)];l.className='lantern';l.style.cssText=`left:${x??Math.random()*100}%;width:${s}px;height:${s*1.3}px;background:${c};box-shadow:0 0 ${s}px ${c};--dx:${(Math.random()-.5)*160}px;animation-duration:${9+Math.random()*8}s`;$('#lanterns').appendChild(l);setTimeout(()=>l.remove(),18000)}
+if(!matchMedia('(prefers-reduced-motion:reduce)').matches){for(let i=0;i<8;i++)setTimeout(()=>lantern(),i*500);setInterval(()=>lantern(),1800)}
+$('#wishBtn').addEventListener('click',()=>{for(let i=0;i<6;i++)setTimeout(()=>lantern(),i*120)});
+$('#hero').addEventListener('mousemove',e=>{const r=innerWidth/2,x=(e.clientX-r)/r;$('#kiteWrap').style.transform=`translateX(${x*18}px)`;$('#kiteWrap').style.transition='transform .4s'});
+
+/* tabs */
+$('#tabs').addEventListener('click',e=>{const t=e.target.closest('.tab');if(!t)return;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('on',i==t.dataset.i))});
+/* accordions / step expanders */
+document.addEventListener('click',e=>{const b=e.target.closest('[data-open]');if(!b)return;const a=b.parentElement.querySelector('.acc')||b.querySelector('.acc'),on=!a.classList.contains('on');a.classList.toggle('on',on);b.setAttribute('aria-expanded',on);const p=b.querySelector('.plus');if(p)p.style.transform=on?'rotate(45deg)':''});
+/* flip keyboard + touch */
+document.querySelectorAll('.flip').forEach(f=>{f.addEventListener('click',()=>f.classList.toggle('on'));f.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();f.classList.toggle('on')}})});
+/* gantt */
+function showPh(i){const p=phases[i];$('#phaseInfo').innerHTML=`<p class="font-bold text-lg" style="color:${C[i%5]}">${p[0]} · ${p[1]==p[2]?'Month '+p[1]:'Months '+p[1]+'–'+p[2]}</p><p class="mt-2"><b>Key actions:</b> <span class="text-[var(--mut)]">${p[3]}</span></p><p class="mt-1"><b>Expected output:</b> <span class="text-[var(--mut)]">${p[4]}</span></p>`}
+showPh(0);$('#gantt').addEventListener('click',e=>{const b=e.target.closest('[data-ph]');if(b)showPh(+b.dataset.ph)});
+/* workshop */
+function showW(i){const w=ws[i];document.querySelectorAll('.seg').forEach((s,j)=>{s.style.flex=j==i?w[4]*2.2:ws[j][4];s.style.opacity=j==i?1:.65});$('#wsInfo').innerHTML=`<p class="text-sm text-[var(--mut)]">Minutes ${w[0]}</p><h4 class="disp text-2xl font-bold" style="color:${C[i]}">${w[1]}</h4><p class="mt-1">${w[2]}</p><p class="text-[var(--mut)] text-sm mt-1">Purpose: ${w[3]}</p>`}
+showW(0);$('#ws').addEventListener('click',e=>{const b=e.target.closest('[data-w]');if(b)showW(+b.dataset.w)});
+/* dream demo */
+function launch(){const i=$('#dreamIn'),v=i.value.trim();if(!v)return i.focus();const s=$('#sky');s.querySelector('p')?.remove();const d=document.createElement('div'),c=C[Math.floor(Math.random()*5)];d.textContent='✦ '+v;d.style.cssText=`position:absolute;left:${8+Math.random()*60}%;bottom:-30px;padding:.35rem .9rem;border-radius:999px;background:${c};color:#1b1030;font-weight:700;font-size:.9rem;white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis`;s.appendChild(d);d.animate([{transform:'translateY(0)',opacity:0},{opacity:1,offset:.15},{transform:'translateY(-170px)',opacity:1}],{duration:3500,fill:'forwards',easing:'ease-out'});const r=d.getBoundingClientRect();spark(r.left+20,r.top,10);i.value='';}
+$('#dreamBtn').addEventListener('click',launch);$('#dreamIn').addEventListener('keydown',e=>{if(e.key==='Enter')launch()});
+/* checklist */
+$('#todo').addEventListener('click',e=>{const b=e.target.closest('.chk');if(!b)return;b.classList.toggle('done');b.querySelector('.tick').textContent=b.classList.contains('done')?'✓':'';const n=document.querySelectorAll('.chk.done').length;$('#prog').style.width=n/8*100+'%';$('#progTxt').textContent=n===8?'All 8 done. Ready for take-off! 🚀':`${n} of 8 done`;if(n===8){const r=$('#prog').getBoundingClientRect();spark(r.right,r.top,30)}});
+/* reveal + counters + bars */
+const io=new IntersectionObserver(es=>es.forEach(en=>{if(!en.isIntersecting)return;const t=en.target;t.classList.add('in');t.querySelectorAll('[data-n]').forEach(n=>{const to=+n.dataset.n;let s=null;const f=ts=>{s??=ts;const p=Math.min((ts-s)/1400,1);n.textContent=Math.round(to*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)};requestAnimationFrame(f)});io.unobserve(t)}),{threshold:.15});
+document.querySelectorAll('.rv').forEach(x=>io.observe(x));
+const bio=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.querySelectorAll('.gbar').forEach(b=>b.style.width=b.dataset.w+'%');bio.disconnect()}}),{threshold:.3});bio.observe($('#budget'));
+/* scroll progress */
+addEventListener('scroll',()=>{const h=document.documentElement,p=scrollY/(h.scrollHeight-innerHeight);$('#bar').style.width=p*100+'%';const j=$('#steps').getBoundingClientRect(),lp=Math.min(Math.max((innerHeight*.6-j.top)/j.height,0),1);$('#line').style.height=lp*100+'%'},{passive:true});
+</script>
 </body>
 </html>
