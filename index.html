@@ -19,12 +19,13 @@
             warmgray: '#8b7e7a'
           },
           animation: {
-            'fade-up': 'fadeUp 0.7s ease-out forwards',
+            'fade-up': 'fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
             'float': 'float 3s ease-in-out infinite',
             'pulse-soft': 'pulseSoft 2s infinite',
+            'spin-slow': 'spin 8s linear infinite',
           },
           keyframes: {
-            fadeUp: { '0%': { opacity: '0', transform: 'translateY(18px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+            fadeUp: { '0%': { opacity: '0', transform: 'translateY(24px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
             float: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-6px)' } },
             pulseSoft: { '0%,100%': { opacity: '1' }, '50%': { opacity: '0.7' } },
           }
@@ -33,152 +34,194 @@
     }
   </script>
   <style>
-    /* custom smooth scroll, selection, hover/click animations */
+    /* smooth scroll, selection, base setup */
     html { scroll-behavior: smooth; }
-    body { background-color: #faf9f7; color: #0a0a0a; }
+    body { 
+      background-color: #faf9f7; 
+      color: #0a0a0a; 
+      /* Ambient background gradient for visual interest */
+      background-image: radial-gradient(circle at 15% 50%, rgba(196, 69, 44, 0.03), transparent 25%),
+                        radial-gradient(circle at 85% 30%, rgba(196, 69, 44, 0.04), transparent 25%);
+      background-attachment: fixed;
+    }
     ::selection { background: #c4452c; color: white; }
+
+    /* --- NAV HOVER EFFECTS --- */
+    .nav-link {
+      position: relative;
+      display: inline-block;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -4px;
+      left: 50%;
+      background-color: #c4452c;
+      transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+      transform: translateX(-50%);
+      border-radius: 2px;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    .nav-link:active {
+      transform: scale(0.92);
+    }
+
+    /* glassmorphism for nav */
+    .nav-blur {
+      background: rgba(250, 249, 247, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(196, 69, 44, 0.1);
+      transition: box-shadow 0.3s ease;
+    }
+    .nav-blur:hover {
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
+    }
 
     /* interactive card hover & click animations */
     .card-hover {
-      transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.3s ease, border-color 0.2s;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.2s;
     }
     .card-hover:hover {
-      transform: translateY(-6px) scale(1.01);
-      box-shadow: 0 20px 30px -12px rgba(0,0,0,0.15), 0 6px 12px -6px rgba(196,69,44,0.12);
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.1), 0 8px 16px -8px rgba(196,69,44,0.15);
       border-color: #c4452c;
     }
     .card-hover:active {
-      transform: scale(0.99) translateY(-2px);
+      transform: scale(0.97) translateY(-2px);
     }
+
     .pillar-card {
-      transition: all 0.2s ease;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
       border-left: 4px solid #c4452c;
     }
     .pillar-card:hover {
-      border-left-width: 10px;
-      border-left-color: #c4452c;
+      border-left-width: 8px;
       background-color: #ffffff;
-      transform: translateX(4px);
+      transform: translateX(6px) translateY(-4px);
+      box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08);
     }
-    .stat-number {
-      transition: color 0.2s;
-    }
-    .stat-number:hover {
-      color: #c4452c;
-    }
-    .journey-step {
-      transition: all 0.25s;
-    }
+
+    .stat-number { transition: color 0.3s; }
+    .stat-number:hover { color: #c4452c; }
+    
+    .journey-step { transition: all 0.3s ease; }
     .journey-step:hover {
       background-color: #ffffff;
-      transform: scale(1.02);
-      box-shadow: 0 8px 16px -6px rgba(0,0,0,0.1);
+      transform: scale(1.03) translateY(-4px);
+      box-shadow: 0 12px 24px -8px rgba(0,0,0,0.08);
+      border-color: rgba(196, 69, 44, 0.2);
     }
-    .feature-tag {
-      transition: all 0.15s;
-    }
+
+    .feature-tag { transition: all 0.2s ease; cursor: default; }
     .feature-tag:hover {
       background-color: #c4452c;
       color: white;
-      transform: scale(1.05);
+      transform: scale(1.05) translateY(-2px);
       border-color: #c4452c;
-    }
-    /* subtle float on icons */
-    .float-icon {
-      animation: float 2.5s ease-in-out infinite;
-    }
-    .pulse-dot {
-      animation: pulseSoft 1.8s infinite;
+      box-shadow: 0 4px 10px rgba(196, 69, 44, 0.2);
     }
 
-    /* custom divider line */
-    .section-divider {
-      height: 2px;
-      background: linear-gradient(90deg, transparent, #c4452c30, #c4452c, #c4452c30, transparent);
-    }
-    /* glassmorphism for nav */
-    .nav-blur {
-      background: rgba(250, 249, 247, 0.92);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(196, 69, 44, 0.15);
-    }
+    /* subtle float on icons */
+    .float-icon { animation: float 3s ease-in-out infinite; }
+    .pulse-dot { animation: pulseSoft 2s infinite; }
+
+    /* Staggered load utilities */
+    .delay-100 { animation-delay: 100ms; }
+    .delay-200 { animation-delay: 200ms; }
+    .delay-300 { animation-delay: 300ms; }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet">
 </head>
 <body class="font-sans antialiased text-ink selection:bg-accent selection:text-white">
 
-  <!-- nav – sticky blur, minimal, hover effects -->
-  <nav class="nav-blur sticky top-0 z-50 py-3 px-6 md:px-12 flex justify-between items-center">
-    <div class="text-xl font-semibold tracking-tight flex items-center gap-2">
-      <span class="text-accent text-2xl leading-none">✶</span>
-      <span>Udaan<span class="text-accent">.</span></span>
+  <!-- NAV – sticky blur, hover effects, interactive logo -->
+  <nav class="nav-blur sticky top-0 z-50 py-4 px-6 md:px-12 flex justify-between items-center">
+    <!-- Logo with group hover -->
+    <a href="#" class="text-xl font-semibold tracking-tight flex items-center gap-2 group transition-transform active:scale-95">
+      <span class="text-accent text-2xl leading-none group-hover:rotate-180 transition-transform duration-700 ease-in-out">✶</span>
+      <span>Udaan<span class="text-accent group-hover:animate-pulse">.</span></span>
+    </a>
+    
+    <!-- Nav Links with sliding underline -->
+    <div class="hidden md:flex space-x-8 text-sm font-medium items-center">
+      <a href="#problem" class="nav-link text-ink/80 hover:text-ink transition-colors duration-200">Problem</a>
+      <a href="#solution" class="nav-link text-ink/80 hover:text-ink transition-colors duration-200">Solution</a>
+      <a href="#journey" class="nav-link text-ink/80 hover:text-ink transition-colors duration-200">Journey</a>
+      <a href="#features" class="nav-link text-ink/80 hover:text-ink transition-colors duration-200">Features</a>
+      <a href="#pilot" class="nav-link text-ink/80 hover:text-ink transition-colors duration-200">Pilot</a>
+      
+      <!-- CTA Button with fill-swipe hover effect -->
+      <a href="#next" class="group relative overflow-hidden bg-accent/10 border border-accent/30 text-accent px-5 py-2 rounded-full transition-all duration-300 active:scale-95 hover:shadow-[0_8px_20px_-6px_rgba(196,69,44,0.4)] hover:-translate-y-0.5">
+        <span class="relative z-10 group-hover:text-white transition-colors duration-300">Take action</span>
+        <div class="absolute inset-0 h-full w-0 bg-accent transition-all duration-300 ease-out group-hover:w-full z-0"></div>
+      </a>
     </div>
-    <div class="hidden md:flex space-x-8 text-sm font-medium">
-      <a href="#problem" class="hover:text-accent transition-colors duration-200">Problem</a>
-      <a href="#solution" class="hover:text-accent transition-colors duration-200">Solution</a>
-      <a href="#journey" class="hover:text-accent transition-colors duration-200">Journey</a>
-      <a href="#features" class="hover:text-accent transition-colors duration-200">Features</a>
-      <a href="#pilot" class="hover:text-accent transition-colors duration-200">Pilot</a>
-      <a href="#next" class="bg-accent/10 border border-accent/30 text-accent px-4 py-1.5 rounded-full hover:bg-accent hover:text-white transition-all duration-300">Take action</a>
-    </div>
-    <div class="md:hidden text-accent text-2xl">☰</div>
+    
+    <!-- Mobile Menu Icon (Active state added) -->
+    <div class="md:hidden text-accent text-2xl cursor-pointer active:scale-90 transition-transform">☰</div>
   </nav>
 
-  <!-- HERO SECTION — bold, tagline, subtle animation -->
-  <section class="max-w-6xl mx-auto px-6 pt-20 pb-16 md:pt-28 md:pb-24 flex flex-col items-start">
-    <div class="inline-block bg-accent/10 text-accent text-xs font-semibold tracking-wider px-4 py-1.5 rounded-full mb-6 animate-pulse-soft">
+  <!-- HERO SECTION -->
+  <section class="max-w-6xl mx-auto px-6 pt-20 pb-16 md:pt-28 md:pb-24 flex flex-col items-start relative">
+    <div class="inline-block bg-accent/10 text-accent text-xs font-semibold tracking-wider px-4 py-1.5 rounded-full mb-6 animate-fade-up">
+      <span class="inline-block w-1.5 h-1.5 bg-accent rounded-full mr-2 animate-pulse"></span>
       SOCIAL IMPACT PROTOTYPE
     </div>
-    <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.05] tracking-tight max-w-4xl">
-      Every child's <span class="text-accent">dream</span>,<br/>
+    <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.05] tracking-tight max-w-4xl animate-fade-up delay-100 opacity-0">
+      Every child's <span class="text-accent relative inline-block">dream<svg class="absolute -bottom-2 left-0 w-full text-accent/30" viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M0 15 Q 50 0 100 15" fill="none" stroke="currentColor" stroke-width="4"/></svg></span>,<br/>
       every family's <span class="text-accent">hope</span>.
     </h1>
-    <p class="mt-8 text-lg md:text-xl text-warmgray max-w-2xl leading-relaxed">
+    <p class="mt-8 text-lg md:text-xl text-warmgray max-w-2xl leading-relaxed animate-fade-up delay-200 opacity-0">
       Udaan is a child-centred development ecosystem — not just a donation platform, not an adoption intermediary.
       We build emotional support, creative confidence, life skills, and long-term mentorship for children in institutional care.
     </p>
-    <div class="mt-10 flex flex-wrap gap-4">
-      <a href="#solution" class="bg-accent text-white px-8 py-3.5 rounded-full font-medium shadow-lg shadow-accent/20 hover:shadow-accent/40 hover:-translate-y-1 transition-all duration-300 active:scale-95">
-        Explore the four pillars →
+    <div class="mt-10 flex flex-wrap gap-4 animate-fade-up delay-300 opacity-0">
+      <a href="#solution" class="bg-accent text-white px-8 py-3.5 rounded-full font-medium shadow-[0_10px_25px_-5px_rgba(196,69,44,0.4)] hover:shadow-[0_15px_35px_-5px_rgba(196,69,44,0.5)] hover:-translate-y-1 transition-all duration-300 active:scale-95 group flex items-center gap-2">
+        Explore the four pillars 
+        <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
       </a>
-      <a href="#pilot" class="border border-ink/20 px-8 py-3.5 rounded-full font-medium hover:border-accent hover:text-accent transition-all duration-300 active:scale-95">
+      <a href="#pilot" class="border border-ink/20 px-8 py-3.5 rounded-full font-medium hover:border-accent hover:text-accent hover:bg-white transition-all duration-300 active:scale-95 shadow-sm hover:shadow-md">
         Mumbai pilot
       </a>
     </div>
   </section>
 
-  <!-- PROBLEM SECTION — sociological gap, clean grid -->
-  <section id="problem" class="max-w-6xl mx-auto px-6 py-16 md:py-24 border-t border-ink/5">
+  <!-- PROBLEM SECTION -->
+  <section id="problem" class="max-w-6xl mx-auto px-6 py-16 md:py-24 border-t border-ink/5 relative">
     <div class="grid md:grid-cols-2 gap-12 items-start">
       <div>
         <h2 class="text-xs font-semibold tracking-[0.2em] text-accent uppercase mb-4">01 — The gap</h2>
         <h3 class="text-3xl md:text-4xl font-bold tracking-tight mb-6">Children in care have shelter, food, schooling — but often lack consistent mentoring, creative expression, and a trusted adult.</h3>
         <p class="text-warmgray leading-relaxed mb-8">Many institutionalised children struggle to express aspirations, identify strengths, or plan for life after care. The system has good intentions but fragmented support.</p>
-        <div class="bg-accentSoft/40 p-6 rounded-2xl border-l-4 border-accent">
-          <p class="italic text-ink/80">"Udaan aims to turn care into opportunity and aspiration into a guided pathway."</p>
+        <div class="bg-gradient-to-r from-accentSoft/40 to-transparent p-6 rounded-2xl border-l-4 border-accent hover:pl-8 transition-all duration-300">
+          <p class="italic text-ink/80 font-medium">"Udaan aims to turn care into opportunity and aspiration into a guided pathway."</p>
         </div>
       </div>
       <div class="space-y-5">
-        <div class="card-hover bg-white/60 border border-ink/10 rounded-2xl p-6 backdrop-blur-sm">
+        <div class="card-hover bg-white/80 border border-ink/5 rounded-2xl p-6 backdrop-blur-md">
           <div class="flex gap-4">
-            <span class="text-3xl">🧠</span>
+            <span class="text-3xl group-hover:scale-110 transition-transform">🧠</span>
             <div><h4 class="font-bold">Emotional support gap</h4><p class="text-sm text-warmgray mt-1">Limited access to stable, trusted adult mentors and individual encouragement.</p></div>
           </div>
         </div>
-        <div class="card-hover bg-white/60 border border-ink/10 rounded-2xl p-6 backdrop-blur-sm">
+        <div class="card-hover bg-white/80 border border-ink/5 rounded-2xl p-6 backdrop-blur-md">
           <div class="flex gap-4">
             <span class="text-3xl">🎨</span>
             <div><h4 class="font-bold">Creative exposure gap</h4><p class="text-sm text-warmgray mt-1">Insufficient opportunities in dance, poetry, art, music, and self‑expression.</p></div>
           </div>
         </div>
-        <div class="card-hover bg-white/60 border border-ink/10 rounded-2xl p-6 backdrop-blur-sm">
+        <div class="card-hover bg-white/80 border border-ink/5 rounded-2xl p-6 backdrop-blur-md">
           <div class="flex gap-4">
             <span class="text-3xl">📚</span>
             <div><h4 class="font-bold">Career guidance gap</h4><p class="text-sm text-warmgray mt-1">Limited awareness of careers, scholarships, and employability skills.</p></div>
           </div>
         </div>
-        <div class="card-hover bg-white/60 border border-ink/10 rounded-2xl p-6 backdrop-blur-sm">
+        <div class="card-hover bg-white/80 border border-ink/5 rounded-2xl p-6 backdrop-blur-md">
           <div class="flex gap-4">
             <span class="text-3xl">⚖️</span>
             <div><h4 class="font-bold">Adoption‑awareness gap</h4><p class="text-sm text-warmgray mt-1">Prospective parents may not understand the authorised, child‑centred process.</p></div>
@@ -188,240 +231,240 @@
     </div>
   </section>
 
-  <!-- FOUR PILLARS — colourful, interactive cards -->
-  <section id="solution" class="bg-ink/5 py-16 md:py-28">
+  <!-- FOUR PILLARS -->
+  <section id="solution" class="bg-ink/[0.02] py-16 md:py-28">
     <div class="max-w-6xl mx-auto px-6">
       <h2 class="text-xs font-semibold tracking-[0.2em] text-accent uppercase mb-4">02 — Four‑pillar solution</h2>
       <h3 class="text-3xl md:text-5xl font-bold tracking-tight mb-16 max-w-2xl">We don't just donate. We build ecosystems.</h3>
       <div class="grid md:grid-cols-2 gap-8">
         <!-- Pillar 1 -->
-        <div class="pillar-card bg-white/70 backdrop-blur-sm p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 group">
-          <div class="text-accent text-5xl mb-6 group-hover:scale-110 transition-transform">🎭</div>
-          <h4 class="text-2xl font-bold mb-3">Skill & Creativity Hubs</h4>
+        <div class="pillar-card bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-sm group">
+          <div class="text-accent text-5xl mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300 origin-bottom-left">🎭</div>
+          <h4 class="text-2xl font-bold mb-3 group-hover:text-accent transition-colors">Skill & Creativity Hubs</h4>
           <p class="text-warmgray text-sm leading-relaxed mb-4">Weekly sessions: dance, theatre, poetry, art, digital literacy. Children build talent portfolios and confidence.</p>
           <div class="flex flex-wrap gap-2 text-xs">
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1">Dance</span>
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1">Poetry</span>
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1">Art</span>
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1">Digital</span>
+            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">Dance</span>
+            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">Poetry</span>
+            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">Art</span>
+            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">Digital</span>
           </div>
         </div>
         <!-- Pillar 2 -->
-        <div class="pillar-card bg-white/70 backdrop-blur-sm p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 group">
-          <div class="text-accent text-5xl mb-6 group-hover:scale-110 transition-transform">🧭</div>
-          <h4 class="text-2xl font-bold mb-3">Dream Mapping & Mentorship</h4>
+        <div class="pillar-card bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-sm group">
+          <div class="text-accent text-5xl mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 origin-bottom-left">🧭</div>
+          <h4 class="text-2xl font-bold mb-3 group-hover:text-accent transition-colors">Dream Mapping & Mentorship</h4>
           <p class="text-warmgray text-sm leading-relaxed mb-4">Dream journals, strength mapping, mentor matching, career discovery days, and pathway plans.</p>
           <div class="flex flex-wrap gap-2 text-xs">
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1">Journals</span>
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1">Mentors</span>
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1">Career days</span>
+            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">Journals</span>
+            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">Mentors</span>
+            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">Career days</span>
           </div>
         </div>
         <!-- Pillar 3 -->
-        <div class="pillar-card bg-white/70 backdrop-blur-sm p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 group">
-          <div class="text-accent text-5xl mb-6 group-hover:scale-110 transition-transform">🤝</div>
-          <h4 class="text-2xl font-bold mb-3">Needs‑to‑Support Network</h4>
+        <div class="pillar-card bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-sm group">
+          <div class="text-accent text-5xl mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300 origin-bottom-left">🤝</div>
+          <h4 class="text-2xl font-bold mb-3 group-hover:text-accent transition-colors">Needs‑to‑Support Network</h4>
           <p class="text-warmgray text-sm leading-relaxed mb-4">Verified institutional needs connected to donors, CSR, and volunteers. Transparency and dignity first.</p>
           <div class="flex flex-wrap gap-2 text-xs">
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1">Needs board</span>
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1">CSR</span>
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1">Impact updates</span>
+            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">Needs board</span>
+            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">CSR</span>
+            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">Impact updates</span>
           </div>
         </div>
         <!-- Pillar 4 -->
-        <div class="pillar-card bg-white/70 backdrop-blur-sm p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 group">
-          <div class="text-accent text-5xl mb-6 group-hover:scale-110 transition-transform">⚖️</div>
-          <h4 class="text-2xl font-bold mb-3">Responsible Adoption Referral</h4>
+        <div class="pillar-card bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-sm group">
+          <div class="text-accent text-5xl mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 origin-bottom-left">⚖️</div>
+          <h4 class="text-2xl font-bold mb-3 group-hover:text-accent transition-colors">Responsible Adoption Referral</h4>
           <p class="text-warmgray text-sm leading-relaxed mb-4">We never match or place children. We refer prospective parents to authorised agencies like CARA.</p>
           <div class="flex flex-wrap gap-2 text-xs">
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1">Awareness</span>
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1">Legal referral</span>
-            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1">No informal matching</span>
+            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">Awareness</span>
+            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">Legal referral</span>
+            <span class="feature-tag border border-ink/10 rounded-full px-3 py-1 bg-white">No informal matching</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- USER JOURNEY / WORKFLOW — interactive timeline -->
+  <!-- USER JOURNEY -->
   <section id="journey" class="max-w-6xl mx-auto px-6 py-16 md:py-28">
     <h2 class="text-xs font-semibold tracking-[0.2em] text-accent uppercase mb-4">03 — User journey</h2>
     <h3 class="text-3xl md:text-5xl font-bold tracking-tight mb-12">From onboarding to impact.</h3>
     <div class="grid md:grid-cols-3 gap-5">
-      <!-- Step 1-3 -->
-      <div class="journey-step bg-white/50 border border-ink/10 rounded-2xl p-6 cursor-default">
-        <span class="text-accent text-4xl font-bold">01</span>
+      <div class="journey-step bg-white/60 border border-ink/5 rounded-2xl p-6 backdrop-blur-sm">
+        <span class="text-accent text-4xl font-bold opacity-40 group-hover:opacity-100 transition-opacity">01</span>
         <h4 class="font-bold text-lg mt-2">Partner onboarding</h4>
         <p class="text-xs text-warmgray mt-1">MoU, safeguarding checklist, focal person identified.</p>
       </div>
-      <div class="journey-step bg-white/50 border border-ink/10 rounded-2xl p-6 cursor-default">
-        <span class="text-accent text-4xl font-bold">02</span>
+      <div class="journey-step bg-white/60 border border-ink/5 rounded-2xl p-6 backdrop-blur-sm">
+        <span class="text-accent text-4xl font-bold opacity-40 transition-opacity">02</span>
         <h4 class="font-bold text-lg mt-2">Needs assessment</h4>
         <p class="text-xs text-warmgray mt-1">Priority needs list & baseline data.</p>
       </div>
-      <div class="journey-step bg-white/50 border border-ink/10 rounded-2xl p-6 cursor-default">
-        <span class="text-accent text-4xl font-bold">03</span>
+      <div class="journey-step bg-white/60 border border-ink/5 rounded-2xl p-6 backdrop-blur-sm">
+        <span class="text-accent text-4xl font-bold opacity-40 transition-opacity">03</span>
         <h4 class="font-bold text-lg mt-2">Child participation</h4>
         <p class="text-xs text-warmgray mt-1">Safe intro sessions, activity calendar.</p>
       </div>
-      <!-- Step 4-6 -->
-      <div class="journey-step bg-white/50 border border-ink/10 rounded-2xl p-6 cursor-default">
-        <span class="text-accent text-4xl font-bold">04</span>
+      <div class="journey-step bg-white/60 border border-ink/5 rounded-2xl p-6 backdrop-blur-sm">
+        <span class="text-accent text-4xl font-bold opacity-40 transition-opacity">04</span>
         <h4 class="font-bold text-lg mt-2">Workshops</h4>
         <p class="text-xs text-warmgray mt-1">Attendance, feedback, talent samples.</p>
       </div>
-      <div class="journey-step bg-white/50 border border-ink/10 rounded-2xl p-6 cursor-default">
-        <span class="text-accent text-4xl font-bold">05</span>
+      <div class="journey-step bg-white/60 border border-ink/5 rounded-2xl p-6 backdrop-blur-sm">
+        <span class="text-accent text-4xl font-bold opacity-40 transition-opacity">05</span>
         <h4 class="font-bold text-lg mt-2">Dream mapping</h4>
         <p class="text-xs text-warmgray mt-1">Individual aspiration & strengths profile.</p>
       </div>
-      <div class="journey-step bg-white/50 border border-ink/10 rounded-2xl p-6 cursor-default">
-        <span class="text-accent text-4xl font-bold">06</span>
+      <div class="journey-step bg-white/60 border border-ink/5 rounded-2xl p-6 backdrop-blur-sm">
+        <span class="text-accent text-4xl font-bold opacity-40 transition-opacity">06</span>
         <h4 class="font-bold text-lg mt-2">Mentorship & exposure</h4>
         <p class="text-xs text-warmgray mt-1">Career pathway & confidence development.</p>
       </div>
-      <!-- Step 7-9 -->
-      <div class="journey-step bg-white/50 border border-ink/10 rounded-2xl p-6 cursor-default">
-        <span class="text-accent text-4xl font-bold">07</span>
+      <div class="journey-step bg-white/60 border border-ink/5 rounded-2xl p-6 backdrop-blur-sm">
+        <span class="text-accent text-4xl font-bold opacity-40 transition-opacity">07</span>
         <h4 class="font-bold text-lg mt-2">Support mobilisation</h4>
         <p class="text-xs text-warmgray mt-1">Delivered resources & impact report.</p>
       </div>
-      <div class="journey-step bg-white/50 border border-ink/10 rounded-2xl p-6 cursor-default">
-        <span class="text-accent text-4xl font-bold">08</span>
+      <div class="journey-step bg-white/60 border border-ink/5 rounded-2xl p-6 backdrop-blur-sm">
+        <span class="text-accent text-4xl font-bold opacity-40 transition-opacity">08</span>
         <h4 class="font-bold text-lg mt-2">Adoption awareness</h4>
         <p class="text-xs text-warmgray mt-1">Responsible legal referral, not placement.</p>
       </div>
-      <div class="journey-step bg-white/50 border border-ink/10 rounded-2xl p-6 cursor-default">
-        <span class="text-accent text-4xl font-bold">09</span>
+      <div class="journey-step bg-white/60 border border-ink/5 rounded-2xl p-6 backdrop-blur-sm">
+        <span class="text-accent text-4xl font-bold opacity-40 transition-opacity">09</span>
         <h4 class="font-bold text-lg mt-2">Monitoring</h4>
         <p class="text-xs text-warmgray mt-1">Improved programme design & accountability.</p>
       </div>
     </div>
   </section>
 
-  <!-- PROTOTYPE FEATURES — grid with hover scale -->
-  <section id="features" class="bg-accentSoft/20 py-16 md:py-28">
+  <!-- PROTOTYPE FEATURES -->
+  <section id="features" class="bg-gradient-to-b from-accentSoft/20 to-transparent py-16 md:py-28">
     <div class="max-w-6xl mx-auto px-6">
       <h2 class="text-xs font-semibold tracking-[0.2em] text-accent uppercase mb-4">04 — Prototype features</h2>
       <h3 class="text-3xl md:text-5xl font-bold tracking-tight mb-12">Tools that give voice, track progress, ensure safety.</h3>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="card-hover bg-white rounded-2xl p-6 border border-ink/5">
-          <span class="text-3xl float-icon inline-block">📔</span>
-          <h4 class="font-bold mt-3">Dream Journal</h4>
+        <div class="card-hover bg-white rounded-2xl p-6 border border-ink/5 group">
+          <span class="text-3xl float-icon inline-block group-hover:scale-125 transition-transform">📔</span>
+          <h4 class="font-bold mt-3 group-hover:text-accent transition-colors">Dream Journal</h4>
           <p class="text-sm text-warmgray mt-1">Paper or secure digital record where children draw, write, or speak about goals.</p>
         </div>
-        <div class="card-hover bg-white rounded-2xl p-6 border border-ink/5">
-          <span class="text-3xl float-icon inline-block">🛂</span>
-          <h4 class="font-bold mt-3">Skill Passport</h4>
+        <div class="card-hover bg-white rounded-2xl p-6 border border-ink/5 group">
+          <span class="text-3xl float-icon inline-block delay-100 group-hover:scale-125 transition-transform">🛂</span>
+          <h4 class="font-bold mt-3 group-hover:text-accent transition-colors">Skill Passport</h4>
           <p class="text-sm text-warmgray mt-1">Tracks workshop participation, interests, certificates, and achievements.</p>
         </div>
-        <div class="card-hover bg-white rounded-2xl p-6 border border-ink/5">
-          <span class="text-3xl float-icon inline-block">📊</span>
-          <h4 class="font-bold mt-3">Mentor Dashboard</h4>
+        <div class="card-hover bg-white rounded-2xl p-6 border border-ink/5 group">
+          <span class="text-3xl float-icon inline-block delay-200 group-hover:scale-125 transition-transform">📊</span>
+          <h4 class="font-bold mt-3 group-hover:text-accent transition-colors">Mentor Dashboard</h4>
           <p class="text-sm text-warmgray mt-1">Secure volunteer tracking for sessions, notes, training status, and escalation.</p>
         </div>
-        <div class="card-hover bg-white rounded-2xl p-6 border border-ink/5">
-          <span class="text-3xl float-icon inline-block">📋</span>
-          <h4 class="font-bold mt-3">Needs Board</h4>
+        <div class="card-hover bg-white rounded-2xl p-6 border border-ink/5 group">
+          <span class="text-3xl float-icon inline-block delay-100 group-hover:scale-125 transition-transform">📋</span>
+          <h4 class="font-bold mt-3 group-hover:text-accent transition-colors">Needs Board</h4>
           <p class="text-sm text-warmgray mt-1">Institution-approved list of items, services, and programme needs.</p>
         </div>
-        <div class="card-hover bg-white rounded-2xl p-6 border border-ink/5">
-          <span class="text-3xl float-icon inline-block">🃏</span>
-          <h4 class="font-bold mt-3">Career Path Cards</h4>
+        <div class="card-hover bg-white rounded-2xl p-6 border border-ink/5 group">
+          <span class="text-3xl float-icon inline-block delay-200 group-hover:scale-125 transition-transform">🃏</span>
+          <h4 class="font-bold mt-3 group-hover:text-accent transition-colors">Career Path Cards</h4>
           <p class="text-sm text-warmgray mt-1">Simple guides for nurse, dancer, teacher, designer, entrepreneur, engineer, chef.</p>
         </div>
-        <div class="card-hover bg-white rounded-2xl p-6 border border-ink/5">
-          <span class="text-3xl float-icon inline-block">⚖️</span>
-          <h4 class="font-bold mt-3">Adoption Info Page</h4>
+        <div class="card-hover bg-white rounded-2xl p-6 border border-ink/5 group">
+          <span class="text-3xl float-icon inline-block delay-300 group-hover:scale-125 transition-transform">⚖️</span>
+          <h4 class="font-bold mt-3 group-hover:text-accent transition-colors">Adoption Info Page</h4>
           <p class="text-sm text-warmgray mt-1">Explains legal process, directs users to authorised agencies. Reduces misinformation.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SAFEGUARDING / ETHICS — compact highlight -->
+  <!-- SAFEGUARDING -->
   <section class="max-w-6xl mx-auto px-6 py-16 md:py-20">
-    <div class="bg-ink/5 rounded-3xl p-8 md:p-12 border-l-8 border-accent flex flex-col md:flex-row gap-8 items-start">
-      <div class="text-6xl">🛡️</div>
+    <div class="bg-white/80 rounded-3xl p-8 md:p-12 border border-ink/5 shadow-sm hover:shadow-lg border-l-8 border-l-accent flex flex-col md:flex-row gap-8 items-start transition-shadow duration-300">
+      <div class="text-6xl animate-pulse-soft">🛡️</div>
       <div>
         <h3 class="text-2xl md:text-3xl font-bold tracking-tight">Safeguarding is non‑negotiable</h3>
-        <p class="text-warmgray mt-3 max-w-2xl">Background checks, child‑safeguarding orientation, no private contact, no public sharing of identities. Clear grievance and escalation routes. We refer only to authorised legal channels for adoption.</p>
+        <p class="text-warmgray mt-3 max-w-2xl leading-relaxed">Background checks, child‑safeguarding orientation, no private contact, no public sharing of identities. Clear grievance and escalation routes. We refer only to authorised legal channels for adoption.</p>
         <div class="mt-6 flex flex-wrap gap-3 text-sm">
-          <span class="feature-tag border border-ink/20 rounded-full px-4 py-1.5">Police verification</span>
-          <span class="feature-tag border border-ink/20 rounded-full px-4 py-1.5">Boundaries training</span>
-          <span class="feature-tag border border-ink/20 rounded-full px-4 py-1.5">Consent protocols</span>
+          <span class="feature-tag border border-ink/10 rounded-full px-4 py-1.5 bg-paper">Police verification</span>
+          <span class="feature-tag border border-ink/10 rounded-full px-4 py-1.5 bg-paper">Boundaries training</span>
+          <span class="feature-tag border border-ink/10 rounded-full px-4 py-1.5 bg-paper">Consent protocols</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- PILOT PLAN + BUDGET / METRICS — dual column -->
+  <!-- PILOT PLAN -->
   <section id="pilot" class="max-w-6xl mx-auto px-6 py-16 md:py-24">
     <div class="grid md:grid-cols-2 gap-12">
       <div>
         <h2 class="text-xs font-semibold tracking-[0.2em] text-accent uppercase mb-4">05 — Mumbai pilot · 6 months</h2>
         <h3 class="text-3xl font-bold tracking-tight mb-6">From foundation to showcase.</h3>
         <div class="space-y-4">
-          <div class="flex gap-4 items-start"><span class="text-accent font-bold w-16">M1</span><p class="text-sm">Select 2 partner institutions; MoU, safeguarding policy, baseline survey.</p></div>
-          <div class="flex gap-4 items-start"><span class="text-accent font-bold w-16">M2</span><p class="text-sm">Recruit 10–15 volunteers; orientation; workshop calendar.</p></div>
-          <div class="flex gap-4 items-start"><span class="text-accent font-bold w-16">M3–4</span><p class="text-sm">Weekly sessions in creativity, dance, poetry, dream mapping.</p></div>
-          <div class="flex gap-4 items-start"><span class="text-accent font-bold w-16">M4</span><p class="text-sm">Assign supervised mentors, hold first Career Discovery Day.</p></div>
-          <div class="flex gap-4 items-start"><span class="text-accent font-bold w-16">M5</span><p class="text-sm">Publish verified needs board, approach donors/CSR.</p></div>
-          <div class="flex gap-4 items-start"><span class="text-accent font-bold w-16">M6</span><p class="text-sm">Outcome review & Udaan Mela talent showcase.</p></div>
+          <div class="flex gap-4 items-start group"><span class="text-accent font-bold w-16 group-hover:translate-x-1 transition-transform">M1</span><p class="text-sm text-ink/80 group-hover:text-ink transition-colors">Select 2 partner institutions; MoU, safeguarding policy, baseline survey.</p></div>
+          <div class="flex gap-4 items-start group"><span class="text-accent font-bold w-16 group-hover:translate-x-1 transition-transform">M2</span><p class="text-sm text-ink/80 group-hover:text-ink transition-colors">Recruit 10–15 volunteers; orientation; workshop calendar.</p></div>
+          <div class="flex gap-4 items-start group"><span class="text-accent font-bold w-16 group-hover:translate-x-1 transition-transform">M3–4</span><p class="text-sm text-ink/80 group-hover:text-ink transition-colors">Weekly sessions in creativity, dance, poetry, dream mapping.</p></div>
+          <div class="flex gap-4 items-start group"><span class="text-accent font-bold w-16 group-hover:translate-x-1 transition-transform">M4</span><p class="text-sm text-ink/80 group-hover:text-ink transition-colors">Assign supervised mentors, hold first Career Discovery Day.</p></div>
+          <div class="flex gap-4 items-start group"><span class="text-accent font-bold w-16 group-hover:translate-x-1 transition-transform">M5</span><p class="text-sm text-ink/80 group-hover:text-ink transition-colors">Publish verified needs board, approach donors/CSR.</p></div>
+          <div class="flex gap-4 items-start group"><span class="text-accent font-bold w-16 group-hover:translate-x-1 transition-transform">M6</span><p class="text-sm text-ink/80 group-hover:text-ink transition-colors">Outcome review & Udaan Mela talent showcase.</p></div>
         </div>
-        <div class="mt-8 bg-white rounded-2xl p-6 border border-ink/10">
+        <div class="mt-8 bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-ink/10 shadow-sm hover:shadow-md transition-shadow">
           <h4 class="font-bold mb-2">Indicative budget</h4>
-          <div class="flex justify-between text-sm py-1 border-b border-ink/5"><span>Workshop materials</span><span>₹50,000</span></div>
-          <div class="flex justify-between text-sm py-1 border-b border-ink/5"><span>Volunteer training & checks</span><span>₹35,000</span></div>
-          <div class="flex justify-between text-sm py-1 border-b border-ink/5"><span>Website/forms/database</span><span>₹20,000</span></div>
-          <div class="flex justify-between text-sm py-1 border-b border-ink/5"><span>Counsellor support</span><span>₹30,000</span></div>
-          <div class="flex justify-between text-sm py-1 border-b border-ink/5"><span>Career Day & Mela</span><span>₹40,000</span></div>
-          <div class="flex justify-between text-sm py-1 border-b border-ink/5"><span>Monitoring & contingency</span><span>₹25,000</span></div>
-          <div class="flex justify-between font-bold pt-2"><span>Total</span><span>₹2,00,000</span></div>
+          <div class="flex justify-between text-sm py-1 border-b border-ink/5 hover:bg-ink/5 px-2 -mx-2 rounded transition-colors"><span>Workshop materials</span><span>₹50,000</span></div>
+          <div class="flex justify-between text-sm py-1 border-b border-ink/5 hover:bg-ink/5 px-2 -mx-2 rounded transition-colors"><span>Volunteer training & checks</span><span>₹35,000</span></div>
+          <div class="flex justify-between text-sm py-1 border-b border-ink/5 hover:bg-ink/5 px-2 -mx-2 rounded transition-colors"><span>Website/forms/database</span><span>₹20,000</span></div>
+          <div class="flex justify-between text-sm py-1 border-b border-ink/5 hover:bg-ink/5 px-2 -mx-2 rounded transition-colors"><span>Counsellor support</span><span>₹30,000</span></div>
+          <div class="flex justify-between text-sm py-1 border-b border-ink/5 hover:bg-ink/5 px-2 -mx-2 rounded transition-colors"><span>Career Day & Mela</span><span>₹40,000</span></div>
+          <div class="flex justify-between text-sm py-1 border-b border-ink/5 hover:bg-ink/5 px-2 -mx-2 rounded transition-colors"><span>Monitoring & contingency</span><span>₹25,000</span></div>
+          <div class="flex justify-between font-bold pt-2 px-2 -mx-2 text-accent"><span>Total</span><span>₹2,00,000</span></div>
         </div>
       </div>
       <div>
         <h2 class="text-xs font-semibold tracking-[0.2em] text-accent uppercase mb-4">Success metrics</h2>
         <div class="grid grid-cols-2 gap-4">
-          <div class="bg-white p-5 rounded-2xl border border-ink/5 hover:border-accent/30 transition"><span class="text-3xl font-bold stat-number">100</span><p class="text-xs text-warmgray mt-1">children engaged</p></div>
-          <div class="bg-white p-5 rounded-2xl border border-ink/5 hover:border-accent/30 transition"><span class="text-3xl font-bold stat-number">40+</span><p class="text-xs text-warmgray mt-1">workshops</p></div>
-          <div class="bg-white p-5 rounded-2xl border border-ink/5 hover:border-accent/30 transition"><span class="text-3xl font-bold stat-number">80</span><p class="text-xs text-warmgray mt-1">Dream Journals</p></div>
-          <div class="bg-white p-5 rounded-2xl border border-ink/5 hover:border-accent/30 transition"><span class="text-3xl font-bold stat-number">25</span><p class="text-xs text-warmgray mt-1">trained mentors</p></div>
-          <div class="bg-white p-5 rounded-2xl border border-ink/5 hover:border-accent/30 transition"><span class="text-3xl font-bold stat-number">10+</span><p class="text-xs text-warmgray mt-1">needs addressed</p></div>
-          <div class="bg-white p-5 rounded-2xl border border-ink/5 hover:border-accent/30 transition"><span class="text-3xl font-bold stat-number">100%</span><p class="text-xs text-warmgray mt-1">safeguarding trained</p></div>
+          <div class="bg-white/80 p-5 rounded-2xl border border-ink/5 hover:border-accent/30 hover:-translate-y-1 hover:shadow-md transition-all duration-300"><span class="text-3xl font-bold stat-number">100</span><p class="text-xs text-warmgray mt-1">children engaged</p></div>
+          <div class="bg-white/80 p-5 rounded-2xl border border-ink/5 hover:border-accent/30 hover:-translate-y-1 hover:shadow-md transition-all duration-300"><span class="text-3xl font-bold stat-number">40+</span><p class="text-xs text-warmgray mt-1">workshops</p></div>
+          <div class="bg-white/80 p-5 rounded-2xl border border-ink/5 hover:border-accent/30 hover:-translate-y-1 hover:shadow-md transition-all duration-300"><span class="text-3xl font-bold stat-number">80</span><p class="text-xs text-warmgray mt-1">Dream Journals</p></div>
+          <div class="bg-white/80 p-5 rounded-2xl border border-ink/5 hover:border-accent/30 hover:-translate-y-1 hover:shadow-md transition-all duration-300"><span class="text-3xl font-bold stat-number">25</span><p class="text-xs text-warmgray mt-1">trained mentors</p></div>
+          <div class="bg-white/80 p-5 rounded-2xl border border-ink/5 hover:border-accent/30 hover:-translate-y-1 hover:shadow-md transition-all duration-300"><span class="text-3xl font-bold stat-number">10+</span><p class="text-xs text-warmgray mt-1">needs addressed</p></div>
+          <div class="bg-white/80 p-5 rounded-2xl border border-ink/5 hover:border-accent/30 hover:-translate-y-1 hover:shadow-md transition-all duration-300"><span class="text-3xl font-bold stat-number">100%</span><p class="text-xs text-warmgray mt-1">safeguarding trained</p></div>
         </div>
-        <!-- team roles compact -->
         <div class="mt-8">
           <h4 class="font-semibold text-sm mb-3 tracking-wide">Core team roles</h4>
           <div class="flex flex-wrap gap-2 text-xs">
-            <span class="feature-tag border border-ink/20 rounded-full px-3 py-1">Programme Lead</span>
-            <span class="feature-tag border border-ink/20 rounded-full px-3 py-1">Safeguarding Lead</span>
-            <span class="feature-tag border border-ink/20 rounded-full px-3 py-1">Institution Coordinator</span>
-            <span class="feature-tag border border-ink/20 rounded-full px-3 py-1">Facilitators</span>
-            <span class="feature-tag border border-ink/20 rounded-full px-3 py-1">Mentor Coordinator</span>
-            <span class="feature-tag border border-ink/20 rounded-full px-3 py-1">Counsellor</span>
+            <span class="feature-tag border border-ink/10 bg-white rounded-full px-3 py-1">Programme Lead</span>
+            <span class="feature-tag border border-ink/10 bg-white rounded-full px-3 py-1">Safeguarding Lead</span>
+            <span class="feature-tag border border-ink/10 bg-white rounded-full px-3 py-1">Institution Coordinator</span>
+            <span class="feature-tag border border-ink/10 bg-white rounded-full px-3 py-1">Facilitators</span>
+            <span class="feature-tag border border-ink/10 bg-white rounded-full px-3 py-1">Mentor Coordinator</span>
+            <span class="feature-tag border border-ink/10 bg-white rounded-full px-3 py-1">Counsellor</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- IMMEDIATE NEXT STEPS + CTA -->
+  <!-- CTA -->
   <section id="next" class="max-w-6xl mx-auto px-6 pb-20 pt-8">
-    <div class="bg-accent text-white rounded-3xl p-10 md:p-16 text-center hover:shadow-2xl transition-shadow duration-500">
-      <h3 class="text-3xl md:text-5xl font-bold tracking-tight mb-4">Ready to build Udaan?</h3>
-      <p class="text-white/80 max-w-xl mx-auto mb-8">Identify two Mumbai-based child-care institutions, create safeguarding policy, recruit facilitators, and launch Dream Journals.</p>
-      <div class="flex flex-wrap justify-center gap-4">
+    <div class="relative bg-accent text-white rounded-3xl p-10 md:p-16 text-center hover:shadow-[0_20px_50px_-12px_rgba(196,69,44,0.6)] transition-all duration-500 overflow-hidden group">
+      <!-- Background decorative circle -->
+      <div class="absolute -top-24 -right-24 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+      
+      <h3 class="relative z-10 text-3xl md:text-5xl font-bold tracking-tight mb-4">Ready to build Udaan?</h3>
+      <p class="relative z-10 text-white/90 max-w-xl mx-auto mb-8 font-light">Identify two Mumbai-based child-care institutions, create safeguarding policy, recruit facilitators, and launch Dream Journals.</p>
+      
+      <div class="relative z-10 flex flex-wrap justify-center gap-4">
         <a href="#" class="bg-white text-accent px-8 py-3.5 rounded-full font-medium hover:bg-paper hover:-translate-y-1 transition-all duration-300 active:scale-95 shadow-lg">Partner with us</a>
-        <a href="#" class="border border-white/40 px-8 py-3.5 rounded-full font-medium hover:bg-white/10 hover:-translate-y-1 transition-all duration-300 active:scale-95">Volunteer</a>
+        <a href="#" class="border border-white/40 px-8 py-3.5 rounded-full font-medium hover:bg-white/10 hover:border-white hover:-translate-y-1 transition-all duration-300 active:scale-95">Volunteer</a>
       </div>
-      <p class="text-xs text-white/50 mt-8">Udaan is a prototype. Adoption referrals only through authorised agencies.</p>
+      <p class="relative z-10 text-xs text-white/60 mt-8">Udaan is a prototype. Adoption referrals only through authorised agencies.</p>
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer class="border-t border-ink/10 py-8 text-center text-xs text-warmgray">
-    <p>© 2025 Udaan · Every child's dream, every family's hope.</p>
+    <p>© 2026 Udaan · Every child's dream, every family's hope.</p>
     <p class="mt-2">This is a social-impact prototype. Not an adoption intermediary.</p>
   </footer>
 </body>
