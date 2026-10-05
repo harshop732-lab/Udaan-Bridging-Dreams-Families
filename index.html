@@ -23,6 +23,7 @@ h1,h2,h3,.disp{font-family:'Bricolage Grotesque','DM Sans',system-ui,sans-serif;
 .grad{background:linear-gradient(100deg,var(--sun),var(--rose) 55%,var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
 .btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 1.5rem;border-radius:999px;font-weight:700;cursor:pointer;border:0;transition:transform .25s,box-shadow .3s;color:#1b1030;background:linear-gradient(100deg,var(--sun),var(--rose))}
 .btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 14px 40px -10px var(--rose)}.btn:active{transform:scale(.96)}
+.btn:disabled{opacity:.6;cursor:wait;transform:none}
 .btn.ghost{background:rgba(255,255,255,.08);color:var(--txt);border:1px solid rgba(255,255,255,.2)}
 .ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.55);transform:scale(0);animation:rip .6s ease-out forwards;pointer-events:none}
 @keyframes rip{to{transform:scale(4);opacity:0}}
@@ -52,6 +53,16 @@ h1,h2,h3,.disp{font-family:'Bricolage Grotesque','DM Sans',system-ui,sans-serif;
 .bob{animation:bob 3.2s ease-in-out infinite}
 @keyframes bob{50%{transform:translateY(-2px)}}
 .kb{filter:drop-shadow(0 10px 18px rgba(255,107,139,.45))}
+
+/* ---- Dream Wall ---- */
+.dcard{padding:.8rem 1rem;border-radius:18px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-left:4px solid var(--sun);text-align:left;word-break:break-word}
+.dcard.new{animation:dreamIn .8s cubic-bezier(.2,.8,.2,1)}
+@keyframes dreamIn{from{opacity:0;transform:translateY(24px) scale(.92)}60%{box-shadow:0 0 28px rgba(255,179,71,.55)}}
+#wall{scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.25) transparent}
+.livedot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--mint);margin-right:.4rem;animation:blink 1.6s ease-in-out infinite}
+.livedot.off{background:var(--sun);animation:none}
+@keyframes blink{50%{opacity:.25}}
+.hp{position:absolute!important;left:-9999px;width:1px;height:1px;opacity:0}
 
 /* ---- Mobile menu + touch/mobile fixes ---- */
 .burger{display:none;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);cursor:pointer;position:relative;flex:none;-webkit-tap-highlight-color:transparent}
@@ -239,16 +250,28 @@ h1,h2,h3,.disp{font-family:'Bricolage Grotesque','DM Sans',system-ui,sans-serif;
  </div>
 </section>
 
-<!-- DREAM DEMO -->
-<section class="px-5 py-20">
+<!-- DREAM WALL (LIVE) -->
+<section id="dreams" class="px-5 py-20">
  <div class="max-w-3xl mx-auto glass rv p-8 sm:p-10 text-center">
   <h2 class="text-3xl sm:text-4xl font-extrabold">Try a Dream Journal moment</h2>
-  <p class="mt-3 text-[var(--mut)]">In every workshop, children finish the line "What I want to learn or become…". Type your own and watch it take off. Nothing is saved or sent.</p>
-  <form id="dreamForm" class="mt-6 flex flex-col sm:flex-row gap-3" onsubmit="return false">
-   <input id="dreamIn" maxlength="40" placeholder="A dancer, a doctor, a chef…" class="flex-1 rounded-full px-5 py-3 bg-white/10 border border-white/20 outline-none focus:border-[var(--sun)] transition placeholder:text-white/40" aria-label="Your dream">
-   <button class="btn justify-center" id="dreamBtn" data-r type="button">Launch my dream</button>
+  <p class="mt-3 text-[var(--mut)]">In every workshop, children finish the line "What I want to learn or become…". Add your name and your dream, and it appears on the Dream Wall below for everyone visiting the site, live.</p>
+  <p class="mt-2 text-sm text-[var(--sun)]">Please use your first name only. Don't share surnames, phone numbers, emails, addresses or anything private.</p>
+
+  <form id="dreamForm" class="mt-6 grid gap-3 sm:grid-cols-[1fr_2fr_auto]" autocomplete="off" novalidate>
+   <label class="sr-only" for="dreamName">Your first name</label>
+   <input id="dreamName" name="name" maxlength="20" placeholder="Your first name" class="rounded-full px-5 py-3 bg-white/10 border border-white/20 outline-none focus:border-[var(--sun)] transition placeholder:text-white/40" aria-label="Your first name" required>
+   <label class="sr-only" for="dreamIn">Your dream</label>
+   <input id="dreamIn" name="dream" maxlength="60" placeholder="I want to become… a dancer, a doctor, a chef…" class="rounded-full px-5 py-3 bg-white/10 border border-white/20 outline-none focus:border-[var(--sun)] transition placeholder:text-white/40" aria-label="Your dream" required>
+   <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+   <button class="btn justify-center" id="dreamBtn" data-r type="submit">Launch my dream</button>
   </form>
-  <div id="sky" class="relative mt-6 h-40 rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-t from-[#2b1b5e]/60 to-transparent"><p class="absolute inset-0 grid place-items-center text-white/30 text-sm">Your dreams appear here</p></div>
+  <p id="dreamMsg" class="mt-3 text-sm min-h-[1.25rem]" role="status" aria-live="polite"></p>
+
+  <div class="mt-4 flex items-center justify-between text-sm text-[var(--mut)] px-1">
+   <span id="liveTag"><span class="livedot off"></span>Connecting…</span>
+   <span id="dreamCount"></span>
+  </div>
+  <div id="wall" class="relative mt-3 grid sm:grid-cols-2 gap-3 max-h-80 overflow-y-auto p-1 rounded-3xl border border-white/10 bg-gradient-to-t from-[#2b1b5e]/60 to-transparent" aria-live="polite" aria-label="Dream Wall"></div>
  </div>
 </section>
 
@@ -391,9 +414,6 @@ showPh(0);$('#gantt').addEventListener('click',e=>{const b=e.target.closest('[da
 /* workshop */
 function showW(i){const w=ws[i];document.querySelectorAll('.seg').forEach((s,j)=>{s.style.flex=j==i?w[4]*2.2:ws[j][4];s.style.opacity=j==i?1:.65});$('#wsInfo').innerHTML=`<p class="text-sm text-[var(--mut)]">Minutes ${w[0]}</p><h4 class="disp text-2xl font-bold" style="color:${C[i]}">${w[1]}</h4><p class="mt-1">${w[2]}</p><p class="text-[var(--mut)] text-sm mt-1">Purpose: ${w[3]}</p>`}
 showW(0);$('#ws').addEventListener('click',e=>{const b=e.target.closest('[data-w]');if(b)showW(+b.dataset.w)});
-/* dream demo */
-function launch(){const i=$('#dreamIn'),v=i.value.trim();if(!v)return i.focus();const s=$('#sky');s.querySelector('p')?.remove();const d=document.createElement('div'),c=C[Math.floor(Math.random()*5)];d.textContent='✦ '+v;d.style.cssText=`position:absolute;left:${8+Math.random()*60}%;bottom:-30px;padding:.35rem .9rem;border-radius:999px;background:${c};color:#1b1030;font-weight:700;font-size:.9rem;white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis`;s.appendChild(d);d.animate([{transform:'translateY(0)',opacity:0},{opacity:1,offset:.15},{transform:'translateY(-170px)',opacity:1}],{duration:3500,fill:'forwards',easing:'ease-out'});const r=d.getBoundingClientRect();spark(r.left+20,r.top,10);i.value='';}
-$('#dreamBtn').addEventListener('click',launch);$('#dreamIn').addEventListener('keydown',e=>{if(e.key==='Enter')launch()});
 /* checklist */
 $('#todo').addEventListener('click',e=>{const b=e.target.closest('.chk');if(!b)return;b.classList.toggle('done');b.querySelector('.tick').textContent=b.classList.contains('done')?'✓':'';const n=document.querySelectorAll('.chk.done').length;$('#prog').style.width=n/8*100+'%';$('#progTxt').textContent=n===8?'All 8 done. Ready for take-off! 🚀':`${n} of 8 done`;if(n===8){const r=$('#prog').getBoundingClientRect();spark(r.right,r.top,30)}});
 /* reveal + counters + bars */
@@ -413,6 +433,112 @@ addEventListener('scroll',()=>{const h=document.documentElement,p=scrollY/(h.scr
  addEventListener('resize',()=>{if(innerWidth>=768)set(false)});
  addEventListener('scroll',()=>{if(m.classList.contains('open'))set(false)},{passive:true});
 })();
+</script>
+
+<!-- LIVE DREAM WALL (Firebase Firestore) -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* 1) PASTE YOUR FIREBASE WEB CONFIG HERE (Firebase console > Project settings > Your apps) */
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+const LIVE = !String(firebaseConfig.apiKey).startsWith("YOUR_");
+const form = $('#dreamForm'), btn = $('#dreamBtn'), msg = $('#dreamMsg');
+const wall = $('#wall'), countEl = $('#dreamCount'), tag = $('#liveTag');
+const seen = new Set();
+let firstLoad = true, localDreams = [], send;
+
+const say = (t, bad) => { msg.textContent = t; msg.style.color = bad ? 'var(--rose)' : 'var(--mint)'; };
+const setTag = (live, text) => { tag.innerHTML = `<span class="livedot ${live ? '' : 'off'}"></span>${text}`; };
+const colorOf = s => C[[...s].reduce((a, c) => a + c.charCodeAt(0), 0) % C.length];
+const clean = s => s.replace(/\s+/g, ' ').trim();
+
+/* Basic safety checks. Extend the word list as needed; also enforced by Firestore rules (length). */
+const BAD = /\b(fuck|shit|bitch|asshole|bastard|sex|porn|nude)\b/i;
+function check(name, dream) {
+  if (name.length < 2) return 'Please enter your first name.';
+  if (dream.length < 2) return 'Please type your dream.';
+  const all = name + ' ' + dream;
+  if (/https?:|www\.|@|\d{6,}/i.test(all)) return "Please don't include links, emails or phone numbers.";
+  if (BAD.test(all)) return 'Please keep it kind and friendly.';
+  return '';
+}
+
+function render(items) {
+  wall.replaceChildren();
+  if (!items.length) {
+    const p = document.createElement('p');
+    p.className = 'text-white/40 text-sm col-span-full py-10 text-center';
+    p.textContent = 'No dreams yet. Be the first to launch one ✨';
+    wall.appendChild(p);
+  }
+  items.forEach(it => {
+    const d = document.createElement('div');
+    d.className = 'dcard';
+    d.style.borderLeftColor = colorOf(it.name);
+    if (!seen.has(it.id)) { if (!firstLoad) d.classList.add('new'); seen.add(it.id); }
+    const q = document.createElement('p'); q.className = 'font-bold'; q.textContent = '✦ ' + it.dream;
+    const n = document.createElement('p'); n.className = 'text-sm text-[var(--mut)] mt-1'; n.textContent = '— ' + it.name;
+    d.append(q, n); wall.appendChild(d);
+  });
+  countEl.textContent = items.length + (items.length === 1 ? ' dream' : ' dreams') + (LIVE ? ' on the wall' : '');
+}
+
+if (LIVE) {
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const col = collection(db, 'dreams');
+  onSnapshot(
+    query(col, orderBy('createdAt', 'desc'), limit(40)),
+    snap => {
+      setTag(true, 'Live: everyone sees new dreams instantly');
+      render(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      firstLoad = false;
+    },
+    () => { setTag(false, 'Could not connect to the Dream Wall'); say('Connection problem. Please refresh and try again.', true); }
+  );
+  send = (name, dream) => addDoc(col, { name, dream, createdAt: serverTimestamp() });
+} else {
+  setTag(false, 'Demo mode: add your Firebase config to share dreams with everyone');
+  firstLoad = false;
+  render(localDreams);
+  send = async (name, dream) => { localDreams.unshift({ id: 'l' + Date.now(), name, dream }); render(localDreams); };
+}
+
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  if (form.elements.website.value) return;               // honeypot: bots fill this
+  const name = clean($('#dreamName').value).slice(0, 20);
+  const dream = clean($('#dreamIn').value).slice(0, 60);
+  const err = check(name, dream);
+  if (err) { say(err, true); return; }
+
+  let last = 0; try { last = +localStorage.getItem('udaanLastDream') || 0; } catch (_) {}
+  const wait = 20000 - (Date.now() - last);
+  if (wait > 0) { say(`Nice! Please wait ${Math.ceil(wait / 1000)}s before launching another dream.`, true); return; }
+
+  btn.disabled = true;
+  try {
+    await send(name, dream);
+    try { localStorage.setItem('udaanLastDream', String(Date.now())); } catch (_) {}
+    say(`Take off, ${name}! Your dream is on the wall ✨`, false);
+    $('#dreamIn').value = '';
+    const r = btn.getBoundingClientRect();
+    spark(r.left + r.width / 2, r.top, 18);
+  } catch (_) {
+    say('Something went wrong. Please try again.', true);
+  } finally {
+    btn.disabled = false;
+  }
+});
 </script>
 </body>
 </html>
