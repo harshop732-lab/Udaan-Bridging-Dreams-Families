@@ -1,301 +1,268 @@
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Udaan - Bridging Dreams & Families</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#1c4587',
-                        secondary: '#3b82f6',
-                        dark: '#0f172a',
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    }
-                }
-            }
+import React, { useState, useEffect, useRef } from 'react';
+import { 
+    Heart, Target, Lightbulb, Map, Network, Users, 
+    BookOpen, Award, LayoutDashboard, ClipboardList, 
+    Briefcase, ArrowRight, Sparkles 
+} from 'lucide-react';
+
+const customStyles = `
+  @keyframes blob {
+    0% { transform: translate(0px, 0px) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+    100% { transform: translate(0px, 0px) scale(1); }
+  }
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+  .glass-card {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 32px 0 rgba(20, 108, 118, 0.05);
+  }
+  .glass-card-teal {
+    background: rgba(224, 247, 250, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+  }
+  .reveal-hidden {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+  }
+  .reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+`;
+
+const ScrollReveal = ({ children, delay = 0, className = "" }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
         }
-    </script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-        
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; }
-        
-        /* Reveal Animations */
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        
-        /* Hover effects */
-        .hover-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .hover-card:hover { transform: translateY(-10px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
-        
-        /* Button Click Ripple */
-        .btn-ripple { position: relative; overflow: hidden; transform: translate3d(0, 0, 0); }
-        .btn-ripple:after { content: ""; display: block; position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; background-image: radial-gradient(circle, #fff 10%, transparent 10.01%); background-repeat: no-repeat; background-position: 50%; transform: scale(10, 10); opacity: 0; transition: transform .5s, opacity 1s; }
-        .btn-ripple:active:after { transform: scale(0, 0); opacity: .3; transition: 0s; }
-        
-        /* Gradient Text */
-        .text-gradient { background: linear-gradient(90deg, #1c4587, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    </style>
-</head>
-<body class="antialiased overflow-x-hidden selection:bg-primary selection:text-white">
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -50px 0px" }
+    );
 
-    <!-- Navbar -->
-    <nav class="fixed w-full z-50 transition-all duration-300" id="navbar">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center bg-white/80 backdrop-blur-md shadow-sm rounded-b-2xl">
-            <a href="#" class="text-2xl font-bold text-primary tracking-tight">UDAAN</a>
-            <div class="hidden md:flex space-x-8 text-sm font-semibold text-gray-600">
-                <a href="#about" class="hover:text-primary transition-colors">About</a>
-                <a href="#mission" class="hover:text-primary transition-colors">Vision</a>
-                <a href="#pillars" class="hover:text-primary transition-colors">4 Pillars</a>
-                <a href="#features" class="hover:text-primary transition-colors">Features</a>
-            </div>
-            <a href="#pillars" class="btn-ripple bg-primary text-white px-5 py-2 rounded-full font-medium shadow-lg shadow-blue-500/30 hover:bg-blue-800 transition-colors">Explore</a>
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) observer.unobserve(ref.current);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className={`reveal-hidden ${isVisible ? 'reveal-visible' : ''} ${className}`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      {children}
+    </div>
+  );
+};
+
+const pillarsData = [
+  {
+    title: "Pillar 1: Skill and Creativity Hubs",
+    description: "Fostering innate talents and teaching practical skills to equip children with the tools they need for a self-sustaining future.",
+    icon: <Lightbulb className="w-8 h-8 text-[#20ACBC]" />,
+    delay: 100
+  },
+  {
+    title: "Pillar 2: Dream Mapping and Mentorship",
+    description: "Connecting children with dedicated mentors who guide them in exploring their aspirations and building structured career paths.",
+    icon: <Map className="w-8 h-8 text-[#20ACBC]" />,
+    delay: 200
+  },
+  {
+    title: "Pillar 3: Needs-to-Support Network",
+    description: "A transparent ecosystem bridging the gap between direct institutional needs and generous donors or volunteers.",
+    icon: <Network className="w-8 h-8 text-[#20ACBC]" />,
+    delay: 300
+  },
+  {
+    title: "Pillar 4: Responsible NGO & Adoption Referral",
+    description: "Building safe, structured partnerships and ensuring ethical referrals for sustainable impact and family integration.",
+    icon: <Users className="w-8 h-8 text-[#20ACBC]" />,
+    delay: 400
+  }
+];
+
+const featuresData = [
+  { title: "Dream Journal", icon: <BookOpen className="w-6 h-6 text-[#146C76]" /> },
+  { title: "Skill Passport", icon: <Award className="w-6 h-6 text-[#146C76]" /> },
+  { title: "Mentor Dashboard", icon: <LayoutDashboard className="w-6 h-6 text-[#146C76]" /> },
+  { title: "Needs Board", icon: <ClipboardList className="w-6 h-6 text-[#146C76]" /> },
+  { title: "Career Path Cards", icon: <Briefcase className="w-6 h-6 text-[#146C76]" /> }
+];
+
+export default function App() {
+  return (
+    <div className="min-h-screen bg-[#f8fafc] text-gray-800 font-sans overflow-hidden selection:bg-[#5ED6E4] selection:text-[#146C76]">
+      <style>{customStyles}</style>
+
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center justify-center pt-20 pb-32 px-6 sm:px-12 lg:px-24 overflow-hidden">
+        {/* Dynamic Background */}
+        <div className="absolute inset-0 w-full h-full bg-[#f8fafc] z-0">
+          <div className="absolute top-0 -left-4 w-72 h-72 bg-[#C7EAEE] rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob"></div>
+          <div className="absolute top-0 -right-4 w-72 h-72 bg-[#E0F7FA] rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob animation-delay-2000"></div>
+          <div className="absolute -bottom-8 left-20 w-72 h-72 bg-[#5ED6E4] rounded-full mix-blend-multiply filter blur-2xl opacity-40 animate-blob animation-delay-4000"></div>
+          {/* Radial Gradient Overlay */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/40 via-transparent to-transparent"></div>
         </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-gradient-to-br from-blue-50 via-white to-blue-100">
-        <div class="absolute w-96 h-96 bg-blue-400/20 rounded-full blur-3xl -top-20 -left-20 animate-pulse"></div>
-        <div class="absolute w-[500px] h-[500px] bg-indigo-400/20 rounded-full blur-3xl bottom-0 right-0 animate-pulse delay-1000"></div>
-        
-        <div class="text-center z-10 max-w-4xl px-6 reveal">
-            <h1 class="text-6xl md:text-8xl font-bold text-dark mb-6 tracking-tighter">
-                Bridging <span class="text-gradient">Dreams</span> <br>& Families
+        <div className="relative z-10 max-w-5xl mx-auto text-center">
+          <ScrollReveal>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card-teal text-[#146C76] font-medium text-sm mb-6 shadow-sm border border-[#5ED6E4]/30">
+              <Sparkles className="w-4 h-4" />
+              <span>Social Impact Initiative</span>
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal delay={150}>
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold text-[#146C76] tracking-tight mb-6 leading-tight">
+              UDAAN
+              <span className="block text-3xl sm:text-4xl md:text-5xl mt-2 font-bold text-gray-800 opacity-90">
+                Bridging Dreams & Families
+              </span>
             </h1>
-            <p class="text-xl md:text-2xl text-gray-600 mb-10 font-light">"Every child's dream, every family's hope."</p>
-            <div class="flex justify-center gap-4">
-                <a href="#about" class="btn-ripple bg-dark text-white px-8 py-3 rounded-full font-semibold shadow-xl hover:-translate-y-1 transition-transform">Learn More</a>
-                <a href="#pillars" class="btn-ripple bg-white text-dark border border-gray-200 px-8 py-3 rounded-full font-semibold shadow-lg hover:-translate-y-1 transition-transform hover:bg-gray-50">Our Model</a>
-            </div>
+          </ScrollReveal>
+
+          <ScrollReveal delay={300}>
+            <p className="text-xl sm:text-2xl text-[#20ACBC] font-medium mb-10 max-w-3xl mx-auto leading-relaxed">
+              "Every child’s dream, every family’s hope."
+            </p>
+          </ScrollReveal>
+
+          <ScrollReveal delay={450}>
+            <button className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#146C76] text-white rounded-full font-semibold text-lg overflow-hidden transition-all hover:bg-[#20ACBC] hover:scale-105 hover:shadow-[0_10px_40px_-10px_rgba(20,108,118,0.7)] active:scale-95 focus:outline-none focus:ring-2 focus:ring-[#5ED6E4] focus:ring-offset-2 focus:ring-offset-[#f8fafc]">
+              <span className="relative z-10 flex items-center gap-2">
+                Join the Journey <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </button>
+          </ScrollReveal>
         </div>
+      </section>
+
+      <section className="relative py-24 px-6 sm:px-12 lg:px-24 bg-white/40">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 lg:gap-16">
+          <ScrollReveal delay={100} className="h-full">
+            <div className="glass-card rounded-3xl p-10 h-full flex flex-col justify-center transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(32,172,188,0.15)] border-t border-l border-white">
+              <div className="w-14 h-14 rounded-2xl bg-[#E0F7FA] flex items-center justify-center mb-6 shadow-sm">
+                <Target className="w-7 h-7 text-[#146C76]" />
+              </div>
+              <h2 className="text-3xl font-bold text-[#146C76] mb-4">Our Vision</h2>
+              <p className="text-lg text-gray-600 leading-relaxed">
+                A future where every child in institutional care is heard, supported, skilled, and able to pursue a meaningful life path.
+              </p>
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal delay={200} className="h-full">
+            <div className="glass-card-teal rounded-3xl p-10 h-full flex flex-col justify-center transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(20,108,118,0.2)] border-t border-l border-white">
+              <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center mb-6 shadow-sm">
+                <Heart className="w-7 h-7 text-[#146C76]" />
+              </div>
+              <h2 className="text-3xl font-bold text-[#146C76] mb-4">Our Mission</h2>
+              <p className="text-lg text-gray-700 leading-relaxed font-medium">
+                To create safe, structured partnerships that provide creativity, mentorship, aspiration mapping, career guidance, and need-based support to children.
+              </p>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      <section className="relative py-32 px-6 sm:px-12 lg:px-24 bg-gradient-to-b from-transparent to-[#E0F7FA]/30">
+        <div className="max-w-7xl mx-auto">
+          <ScrollReveal>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-bold text-[#146C76] mb-4">The Four Pillars</h2>
+              <div className="w-24 h-1.5 bg-[#5ED6E4] mx-auto rounded-full"></div>
+            </div>
+          </ScrollReveal>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {pillarsData.map((pillar, index) => (
+              <ScrollReveal key={index} delay={pillar.delay} className="h-full">
+                <div className="glass-card rounded-3xl p-8 h-full flex flex-col items-start transition-all duration-300 hover:-translate-y-3 hover:bg-white/80 hover:shadow-[0_20px_40px_rgba(32,172,188,0.2)] cursor-pointer group border border-white/60">
+                  <div className="w-16 h-16 rounded-full bg-[#f8fafc] flex items-center justify-center mb-6 shadow-inner group-hover:scale-110 group-hover:bg-[#E0F7FA] transition-all duration-300">
+                    {pillar.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-[#146C76] mb-4 leading-tight">{pillar.title}</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed flex-grow">
+                    {pillar.description}
+                  </p>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="relative py-24 px-6 sm:px-12 lg:px-24 bg-[#C7EAEE]/20">
+        <div className="max-w-6xl mx-auto">
+          <ScrollReveal>
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+              <div>
+                <h2 className="text-3xl md:text-4xl font-bold text-[#146C76] mb-3">Prototype Features</h2>
+                <p className="text-gray-600 max-w-xl">Interactive tools designed to bridge gaps and empower the next generation.</p>
+              </div>
+            </div>
+          </ScrollReveal>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            {featuresData.map((feature, index) => (
+              <ScrollReveal key={index} delay={index * 100}>
+                <div className="glass-card rounded-2xl p-6 text-center transition-all duration-300 hover:-translate-y-2 hover:bg-[#E0F7FA] hover:shadow-[0_10px_30px_rgba(20,108,118,0.15)] flex flex-col items-center justify-center gap-4 h-full aspect-square md:aspect-auto md:h-48 cursor-default">
+                  <div className="p-3 bg-white rounded-full shadow-sm">
+                    {feature.icon}
+                  </div>
+                  <h4 className="font-semibold text-[#146C76] text-sm md:text-base">{feature.title}</h4>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <footer className="bg-[#146C76] text-white py-12 px-6 sm:px-12 text-center relative overflow-hidden">
+        {/* Footer subtle decoration */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[200%] h-32 bg-[#20ACBC]/20 blur-3xl rounded-[100%] pointer-events-none"></div>
         
-        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <a href="#about" class="text-gray-400 hover:text-primary transition-colors">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
-            </a>
+        <div className="relative z-10 max-w-4xl mx-auto">
+          <h2 className="text-2xl font-bold mb-2 tracking-wide">UDAAN</h2>
+          <p className="text-[#E0F7FA] text-sm font-medium mb-8">Bridging Dreams & Families</p>
+          
+          <div className="w-full h-px bg-white/20 mb-8"></div>
+          
+          <p className="text-xs text-white/70 font-semibold tracking-wider uppercase">
+            © {new Date().getFullYear()} UDAAN Initiative. All rights reserved.
+          </p>
         </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="py-24 bg-white relative">
-        <div class="max-w-7xl mx-auto px-6 reveal">
-            <div class="grid md:grid-cols-2 gap-16 items-center">
-                <div>
-                    <h2 class="text-4xl font-bold mb-6 text-dark">Executive Summary</h2>
-                    <p class="text-gray-600 leading-relaxed text-lg mb-6">
-                        Udaan is a social-impact prototype designed to support children living in orphanages, child-care institutions, schools, and trusts. 
-                    </p>
-                    <p class="text-gray-600 leading-relaxed text-lg">
-                        The initiative goes beyond basic donations by building emotional support, creative confidence, life skills, career awareness, and long-term mentorship. It creates a responsible referral bridge between interested prospective adoptive parents and legally authorised adoption agencies.
-                    </p>
-                </div>
-                <div class="grid grid-cols-2 gap-6">
-                    <div class="bg-blue-50 p-6 rounded-2xl hover-card border border-blue-100">
-                        <h3 class="font-bold text-xl text-primary mb-2">Mentorship</h3>
-                        <p class="text-gray-600 text-sm">Providing stable, trusted adult mentors for individual encouragement.</p>
-                    </div>
-                    <div class="bg-indigo-50 p-6 rounded-2xl hover-card border border-indigo-100 transform md:translate-y-8">
-                        <h3 class="font-bold text-xl text-indigo-600 mb-2">Creativity</h3>
-                        <p class="text-gray-600 text-sm">Opportunities in dance, poetry, storytelling, art, and self-expression.</p>
-                    </div>
-                    <div class="bg-purple-50 p-6 rounded-2xl hover-card border border-purple-100">
-                        <h3 class="font-bold text-xl text-purple-600 mb-2">Guidance</h3>
-                        <p class="text-gray-600 text-sm">Awareness of careers, education pathways, and employability skills.</p>
-                    </div>
-                    <div class="bg-sky-50 p-6 rounded-2xl hover-card border border-sky-100 transform md:translate-y-8">
-                        <h3 class="font-bold text-xl text-sky-600 mb-2">Bridging</h3>
-                        <p class="text-gray-600 text-sm">Coordination among NGOs, volunteers, and legal adoption agencies.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Vision & Mission -->
-    <section id="mission" class="py-24 bg-dark text-white">
-        <div class="max-w-7xl mx-auto px-6 reveal">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Vision, Mission & Objectives</h2>
-                <div class="w-24 h-1 bg-primary mx-auto rounded-full"></div>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="bg-gray-800 p-10 rounded-3xl hover-card border border-gray-700 relative overflow-hidden group">
-                    <div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <h3 class="text-2xl font-bold mb-4 flex items-center gap-3">
-                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                        Our Vision
-                    </h3>
-                    <p class="text-gray-300 text-lg leading-relaxed relative z-10">
-                        A future where every child in institutional care is heard, supported, skilled, and able to pursue a meaningful life path.
-                    </p>
-                </div>
-                
-                <div class="bg-gray-800 p-10 rounded-3xl hover-card border border-gray-700 relative overflow-hidden group">
-                    <div class="absolute inset-0 bg-gradient-to-br from-secondary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <h3 class="text-2xl font-bold mb-4 flex items-center gap-3">
-                        <svg class="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                        Our Mission
-                    </h3>
-                    <p class="text-gray-300 text-lg leading-relaxed relative z-10">
-                        To create safe, structured partnerships that provide creativity, mentorship, aspiration mapping, career guidance, and need-based support to children.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 4 Pillars Section -->
-    <section id="pillars" class="py-24 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16 reveal">
-                <h2 class="text-4xl font-bold mb-4 text-dark">Four-Pillar Solution Model</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">A structured approach to transforming institutional care into guided pathways of opportunity.</p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Pillar 1 -->
-                <div class="bg-white rounded-3xl p-8 hover-card border border-gray-100 shadow-sm reveal" style="transition-delay: 100ms;">
-                    <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mb-6 text-blue-600 font-bold text-2xl">1</div>
-                    <h3 class="text-xl font-bold mb-4">Skill & Creativity Hubs</h3>
-                    <p class="text-gray-600 text-sm mb-4">Weekly sessions helping children explore talents safely through dance, poetry, art, and digital literacy.</p>
-                    <ul class="text-sm text-gray-500 space-y-2 list-disc list-inside">
-                        <li>Yoga & Theatre</li>
-                        <li>Creative Writing</li>
-                        <li>Digital Literacy</li>
-                    </ul>
-                </div>
-                
-                <!-- Pillar 2 -->
-                <div class="bg-white rounded-3xl p-8 hover-card border border-gray-100 shadow-sm reveal" style="transition-delay: 200ms;">
-                    <div class="w-14 h-14 bg-indigo-100 rounded-2xl flex items-center justify-center mb-6 text-indigo-600 font-bold text-2xl">2</div>
-                    <h3 class="text-xl font-bold mb-4">Dream Mapping & Mentorship</h3>
-                    <p class="text-gray-600 text-sm mb-4">Supporting each child to identify interests, strengths, and career paths without forcing decisions.</p>
-                    <ul class="text-sm text-gray-500 space-y-2 list-disc list-inside">
-                        <li>Dream Journals</li>
-                        <li>Mentor Matching</li>
-                        <li>Career Days</li>
-                    </ul>
-                </div>
-
-                <!-- Pillar 3 -->
-                <div class="bg-white rounded-3xl p-8 hover-card border border-gray-100 shadow-sm reveal" style="transition-delay: 300ms;">
-                    <div class="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center mb-6 text-purple-600 font-bold text-2xl">3</div>
-                    <h3 class="text-xl font-bold mb-4">Needs-to-Support Network</h3>
-                    <p class="text-gray-600 text-sm mb-4">Capturing verified institutional needs and connecting them with donors and CSR teams transparently.</p>
-                    <ul class="text-sm text-gray-500 space-y-2 list-disc list-inside">
-                        <li>Needs Assessment</li>
-                        <li>Priority Boards</li>
-                        <li>Impact Updates</li>
-                    </ul>
-                </div>
-
-                <!-- Pillar 4 -->
-                <div class="bg-white rounded-3xl p-8 hover-card border border-gray-100 shadow-sm reveal" style="transition-delay: 400ms;">
-                    <div class="w-14 h-14 bg-sky-100 rounded-2xl flex items-center justify-center mb-6 text-sky-600 font-bold text-2xl">4</div>
-                    <h3 class="text-xl font-bold mb-4">Referral Bridge</h3>
-                    <p class="text-gray-600 text-sm mb-4">Educating prospective adoptive parents and referring them only to officially authorised adoption channels.</p>
-                    <ul class="text-sm text-gray-500 space-y-2 list-disc list-inside">
-                        <li>Legal Awareness</li>
-                        <li>Authorised Referrals</li>
-                        <li>No Informal Matching</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Prototype Features -->
-    <section id="features" class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-6 reveal">
-            <div class="bg-gradient-to-r from-primary to-secondary rounded-3xl p-1 md:p-12 text-white shadow-2xl relative overflow-hidden group">
-                <div class="absolute -right-20 -top-20 w-64 h-64 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
-                
-                <div class="relative z-10 p-8 md:p-0">
-                    <h2 class="text-3xl md:text-4xl font-bold mb-10 text-center">Prototype Features</h2>
-                    
-                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl hover:bg-white/20 transition-colors cursor-pointer border border-white/10">
-                            <h4 class="font-bold text-lg mb-2">📖 Dream Journal</h4>
-                            <p class="text-blue-100 text-sm">Gives children a voice to capture their aspirations securely.</p>
-                        </div>
-                        <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl hover:bg-white/20 transition-colors cursor-pointer border border-white/10">
-                            <h4 class="font-bold text-lg mb-2">🎯 Skill Passport</h4>
-                            <p class="text-blue-100 text-sm">Builds confidence and a portfolio of workshop progress.</p>
-                        </div>
-                        <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl hover:bg-white/20 transition-colors cursor-pointer border border-white/10">
-                            <h4 class="font-bold text-lg mb-2">🤝 Mentor Dashboard</h4>
-                            <p class="text-blue-100 text-sm">Promotes consistent, tracked, and accountable mentoring.</p>
-                        </div>
-                        <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl hover:bg-white/20 transition-colors cursor-pointer border border-white/10">
-                            <h4 class="font-bold text-lg mb-2">📋 Needs Board</h4>
-                            <p class="text-blue-100 text-sm">Makes institutional support transparent and targeted.</p>
-                        </div>
-                        <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl hover:bg-white/20 transition-colors cursor-pointer border border-white/10">
-                            <h4 class="font-bold text-lg mb-2">🚀 Career Path Cards</h4>
-                            <p class="text-blue-100 text-sm">Simple guides converting dreams into understandable next steps.</p>
-                        </div>
-                        <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl hover:bg-white/20 transition-colors cursor-pointer border border-white/10">
-                            <h4 class="font-bold text-lg mb-2">🛡️ Safeguarding</h4>
-                            <p class="text-blue-100 text-sm">Child safety is the foundation of the prototype with strict ethical rules.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-dark text-gray-400 py-12 border-t border-gray-800">
-        <div class="max-w-7xl mx-auto px-6 text-center">
-            <h3 class="text-2xl font-bold text-white mb-4 tracking-tight">UDAAN</h3>
-            <p class="mb-8 max-w-md mx-auto">Turning care into opportunity and aspiration into a guided pathway.</p>
-            <div class="flex justify-center space-x-6 mb-8">
-                <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
-                <a href="#" class="hover:text-white transition-colors">Safeguarding Rules</a>
-                <a href="#" class="hover:text-white transition-colors">Contact Partner</a>
-            </div>
-            <p class="text-sm">© 2026 Udaan Initiative. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <!-- JavaScript for Scroll Reveal Animations -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const reveals = document.querySelectorAll(".reveal");
-
-            const revealOnScroll = () => {
-                const windowHeight = window.innerHeight;
-                reveals.forEach(reveal => {
-                    const revealTop = reveal.getBoundingClientRect().top;
-                    const revealPoint = 100;
-                    if (revealTop < windowHeight - revealPoint) {
-                        reveal.classList.add("active");
-                    }
-                });
-            };
-
-            window.addEventListener("scroll", revealOnScroll);
-            revealOnScroll(); // Trigger on load
-            
-            // Navbar blur effect on scroll
-            const navbar = document.getElementById("navbar");
-            window.addEventListener("scroll", () => {
-                if (window.scrollY > 50) {
-                    navbar.classList.add("shadow-md");
-                    navbar.classList.remove("shadow-sm");
-                } else {
-                    navbar.classList.add("shadow-sm");
-                    navbar.classList.remove("shadow-md");
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+      </footer>
+    </div>
+  );
+}
